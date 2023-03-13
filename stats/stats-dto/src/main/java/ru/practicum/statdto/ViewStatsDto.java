@@ -1,15 +1,18 @@
 package ru.practicum.statdto;
 
 import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ViewStatsDto {
-    private String app;
-    private String uri;
-    private Long hits;
+    LocalDateTime start;
+    LocalDateTime end;
+    String[] uris;
+    Boolean unique;
 }
