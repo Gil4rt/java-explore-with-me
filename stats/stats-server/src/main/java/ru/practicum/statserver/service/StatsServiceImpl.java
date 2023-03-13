@@ -9,8 +9,6 @@ import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.model.EndpointHit;
 import ru.practicum.statserver.repository.StatsRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Set;
@@ -21,8 +19,6 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository repository;
     private final StatsMapper mapper;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     @Transactional
