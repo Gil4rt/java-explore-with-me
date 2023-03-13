@@ -13,7 +13,7 @@ import java.time.Instant;
 
 public class StatClient extends BaseClient {
 
-    private static final String APPLICATION_NAME = "stats";
+    private static final String APPLICATION_NAME = "ewm-main-service";
 
     @Autowired
     public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
