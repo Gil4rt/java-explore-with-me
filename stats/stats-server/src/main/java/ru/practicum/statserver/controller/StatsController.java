@@ -9,7 +9,7 @@ import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.service.StatsService;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Set;
 
@@ -27,8 +27,8 @@ public class StatsController {
 
     @GetMapping("/stats")
     public Collection<ViewStatsDto> getStats(
-            @RequestParam LocalDateTime start,
-            @RequestParam LocalDateTime end,
+            @RequestParam Timestamp start,
+            @RequestParam Timestamp end,
             @RequestParam Set<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
 
