@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class StatsMapper {
-    public static EndpointHit toEndpointHit (EndpointHitDto endpointHitDto) {
+    public static EndpointHit toEndpointHit(EndpointHitDto endpointHitDto) {
         EndpointHit endpointHit = new EndpointHit();
         endpointHit.setApp(endpointHitDto.getApp());
         endpointHit.setIp(endpointHitDto.getIp());
@@ -20,7 +20,7 @@ public class StatsMapper {
         return endpointHit;
     }
 
-    public static EndpointHitDto toEndpointHitDto (EndpointHit endpointHit) {
+    public static EndpointHitDto toEndpointHitDto(EndpointHit endpointHit) {
         EndpointHitDto endpointHitDto = new EndpointHitDto();
         endpointHitDto.setApp(endpointHit.getApp());
         endpointHitDto.setIp(endpointHit.getIp());
