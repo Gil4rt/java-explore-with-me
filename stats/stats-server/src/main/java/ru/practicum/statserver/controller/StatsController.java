@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statdto.ViewStatsDto;
-import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.service.StatsService;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
 @Validated
 public class StatsController {
     private final StatsService statsService;
-    private final StatsMapper statsMapper;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
