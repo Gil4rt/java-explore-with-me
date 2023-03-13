@@ -30,7 +30,7 @@ public class StatClient extends BaseClient {
                 .app(APPLICATION_NAME)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
-                .timestamp(Timestamp.from(Instant.now()))
+                .timestamp(Timestamp.from(Instant.now()).toLocalDateTime())
                 .build();
         post("/hit", hit);
     }

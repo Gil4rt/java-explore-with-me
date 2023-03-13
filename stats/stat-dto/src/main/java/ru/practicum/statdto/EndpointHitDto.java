@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,5 +24,5 @@ public class EndpointHitDto {
     String ip;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
-    Timestamp timestamp;
+    LocalDateTime timestamp;
 }
