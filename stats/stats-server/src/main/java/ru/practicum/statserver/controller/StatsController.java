@@ -32,7 +32,6 @@ public class StatsController {
             @RequestParam Set<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
 
-        return statsMapper.toCollection(
-                statsService.getStats(start, end, uris, unique));
+        return statsService.getStats(start, end, uris, unique);
     }
 }

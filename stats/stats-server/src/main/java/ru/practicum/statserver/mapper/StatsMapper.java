@@ -2,9 +2,9 @@ package ru.practicum.statserver.mapper;
 
 import org.mapstruct.Mapper;
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.model.EndpointHit;
+import ru.practicum.statserver.model.ViewStats;
 
 import java.util.Collection;
 
@@ -18,5 +18,4 @@ public interface StatsMapper {
     ViewStatsDto toDto(ViewStats model);
 
     Collection<ViewStatsDto> toCollection(Collection<ViewStats> viewStats);
-
 }

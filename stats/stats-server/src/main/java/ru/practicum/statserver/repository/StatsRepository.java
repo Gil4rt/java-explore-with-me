@@ -3,8 +3,8 @@ package ru.practicum.statserver.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.model.EndpointHit;
+import ru.practicum.statserver.model.ViewStats;
 
 import java.sql.Timestamp;
 import java.util.Collection;
