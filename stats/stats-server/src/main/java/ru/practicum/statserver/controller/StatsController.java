@@ -9,7 +9,6 @@ import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.service.StatsService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,8 +21,8 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitDto create(@RequestBody @Valid EndpointHitDto endpointHitDto) {
-        return statsService.create(statsMapper.toModel(endpointHitDto));
+    public EndpointHitDto create(@RequestBody EndpointHitDto endpointHitDto) {
+        return statsService.create(endpointHitDto);
     }
 
     @GetMapping("/stats")

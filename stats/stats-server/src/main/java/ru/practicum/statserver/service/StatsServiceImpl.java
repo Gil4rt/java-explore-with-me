@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.mapper.StatsMapper;
-import ru.practicum.statserver.model.EndpointHit;
 import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.repository.StatsRepository;
 
@@ -24,8 +23,8 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional
-    public EndpointHitDto create(EndpointHit hit) {
-        return mapper.toDTO(repository.save(hit));
+    public EndpointHitDto create(EndpointHitDto hitDto) {
+        return mapper.toDTO(repository.save(mapper.toModel(hitDto)));
     }
 
     @Override
