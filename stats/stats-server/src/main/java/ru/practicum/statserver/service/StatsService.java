@@ -1,8 +1,8 @@
 package ru.practicum.statserver.service;
 
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.model.EndpointHit;
+import ru.practicum.statserver.model.ViewStats;
 
 import java.sql.Timestamp;
 import java.util.Collection;

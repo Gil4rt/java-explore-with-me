@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.model.EndpointHit;
+import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.repository.StatsRepository;
 
 import java.sql.Timestamp;
