@@ -1,25 +1,40 @@
 package ru.practicum.statserver.mapper;
 
-import org.mapstruct.Mapper;
 import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.model.EndpointHit;
 import ru.practicum.statserver.model.ViewStats;
 
-import java.util.Collection;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Mapper(componentModel = "spring")
-public interface StatsMapper {
+public class StatsMapper {
+    public static EndpointHit toHit(EndpointHitDto endpointHitDto) {
+        EndpointHit endpointHit = new EndpointHit();
+        endpointHit.setApp(endpointHitDto.getApp());
+        endpointHit.setIp(endpointHitDto.getIp());
+        endpointHit.setUri(endpointHitDto.getUri());
+        endpointHit.setTimestamp(LocalDateTime.parse(
+                endpointHitDto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+        );
+        return endpointHit;
+    }
 
-    EndpointHitDto toDTO(EndpointHit model);
+    public static EndpointHitDto toHitDto(EndpointHit endpointHit) {
+        EndpointHitDto endpointHitDto = new EndpointHitDto();
+        endpointHitDto.setApp(endpointHit.getApp());
+        endpointHitDto.setIp(endpointHit.getIp());
+        endpointHitDto.setUri(endpointHit.getUri());
+        endpointHitDto.setTimestamp(endpointHit.getTimestamp().toString());
 
-    EndpointHit toModel(EndpointHitDto dto);
+        return endpointHitDto;
+    }
 
-    ViewStatsDto toDto(ViewStats model);
-
-    Collection<ViewStatsDto> toCollection(Collection<ViewStats> viewStats);
-
-    List<ViewStatsDto> toList(Collection<ViewStats> viewStats);
-
+    public static ViewStatsDto toStatisticViewDto(ViewStats viewStats) {
+        ViewStatsDto viewStatsDto = new ViewStatsDto();
+        viewStatsDto.setApp(viewStats.getApp());
+        viewStatsDto.setUri(viewStats.getUri());
+        viewStatsDto.setHits(viewStats.getHits());
+        return viewStatsDto;
+    }
 }

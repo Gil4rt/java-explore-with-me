@@ -12,6 +12,7 @@ import ru.practicum.statserver.repository.StatsRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,12 +20,11 @@ public class StatsServiceImpl implements StatsService {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final StatsRepository repository;
-    private final StatsMapper mapper;
 
     @Override
     @Transactional
     public EndpointHitDto create(EndpointHitDto hitDto) {
-        return mapper.toDTO(repository.save(mapper.toModel(hitDto)));
+        return StatsMapper.toHitDto(repository.save(StatsMapper.toHit(hitDto)));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class StatsServiceImpl implements StatsService {
         } else {
             result = repository.findUniqueIp(startDateTime, endDateTime, List.of(uris));
         }
-        return mapper.toList(result);
+        return result.stream().map(StatsMapper::toStatisticViewDto).collect(Collectors.toList());
     }
 
 
