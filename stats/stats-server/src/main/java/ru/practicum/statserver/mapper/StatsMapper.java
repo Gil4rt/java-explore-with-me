@@ -1,24 +1,22 @@
 package ru.practicum.statserver.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.statdto.EndpointHitRequestDto;
-import ru.practicum.statdto.EndpointHitResponseDto;
+import ru.practicum.statdto.EndpointHitDto;
+import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.model.EndpointHit;
-import ru.practicum.statserver.model.ViewStats;
 
 import java.util.Collection;
 
 @Mapper(componentModel = "spring")
 public interface StatsMapper {
 
-    EndpointHit toEndpointHit(EndpointHitRequestDto dto);
+    EndpointHitDto toDTO(EndpointHit model);
 
-    EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit entity);
+    EndpointHit toModel(EndpointHitDto dto);
 
-    Collection<ViewStatsDto> toCollectionViewStatsResponseDto(
-            Collection<ViewStats> viewStatsCollection);
+    ViewStatsDto toDto(ViewStats model);
 
-    ViewStatsDto toViewStatsResponseDto(ViewStats viewStats);
+    Collection<ViewStatsDto> toCollection(Collection<ViewStats> viewStats);
 
 }

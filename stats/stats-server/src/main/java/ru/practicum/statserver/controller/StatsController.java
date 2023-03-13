@@ -3,8 +3,7 @@ package ru.practicum.statserver.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.statdto.EndpointHitRequestDto;
-import ru.practicum.statdto.EndpointHitResponseDto;
+import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.service.StatsService;
@@ -22,10 +21,8 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitResponseDto create(
-            @RequestBody @Valid EndpointHitRequestDto endpointHitRequestDto) {
-
-        return statsService.create(statsMapper.toEndpointHit(endpointHitRequestDto));
+    public EndpointHitDto create(@RequestBody @Valid EndpointHitDto endpointHitDto) {
+        return statsService.create(statsMapper.toModel(endpointHitDto));
     }
 
     @GetMapping("/stats")
@@ -35,7 +32,7 @@ public class StatsController {
             @RequestParam Set<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
 
-        return statsMapper.toCollectionViewStatsResponseDto(
+        return statsMapper.toCollection(
                 statsService.getStats(start, end, uris, unique));
     }
 }
