@@ -33,6 +33,5 @@ public class EndpointHit {
     String ip;
     @Column(nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @NotNull
     Timestamp timestamp;
 }

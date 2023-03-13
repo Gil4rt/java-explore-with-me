@@ -1,21 +1,18 @@
 package ru.practicum.statclient;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.statdto.EndpointHitDto;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class StatClient extends BaseClient {
 
-    private static final String APPLICATION_NAME = "ewm-main-service";
-
-    @Autowired
     public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
@@ -25,14 +22,24 @@ public class StatClient extends BaseClient {
         );
     }
 
-    public void createHit(HttpServletRequest request) {
-        final EndpointHitDto hit = EndpointHitDto.builder()
-                .app(APPLICATION_NAME)
-                .uri(request.getRequestURI())
-                .ip(request.getRemoteAddr())
-                .timestamp(Timestamp.from(Instant.now()))
-                .build();
-        post("/hit", hit);
+    public ResponseEntity<Object> addStats(EndpointHitDto endpointHitDto) {
+        return post("/hit", endpointHitDto);
     }
 
+    public ResponseEntity<Object> getStats(String start, String end, String[] uris, Boolean unique) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("start", start);
+        parameters.put("end", end);
+        if (uris != null && uris.length != 0) {
+            parameters.put("uris", uris);
+        }
+        parameters.put("unique", unique);
+
+        if (parameters.containsKey("uris")) {
+            return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+
+        } else {
+            return get("/stats?start={start}&end={end}&unique={unique}", parameters);
+        }
+    }
 }
