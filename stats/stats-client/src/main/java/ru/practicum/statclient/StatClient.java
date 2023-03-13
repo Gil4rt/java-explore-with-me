@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.statdto.EndpointHitDto;
+import ru.practicum.statdto.EndpointHitRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -26,7 +26,7 @@ public class StatClient extends BaseClient {
     }
 
     public void createHit(HttpServletRequest request) {
-        final EndpointHitDto hit = EndpointHitDto.builder()
+        final EndpointHitRequestDto hit = EndpointHitRequestDto.builder()
                 .app(APPLICATION_NAME)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
