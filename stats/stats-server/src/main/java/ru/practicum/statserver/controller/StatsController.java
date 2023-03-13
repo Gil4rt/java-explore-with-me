@@ -10,11 +10,7 @@ import ru.practicum.statserver.mapper.StatsMapper;
 import ru.practicum.statserver.service.StatsService;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping
