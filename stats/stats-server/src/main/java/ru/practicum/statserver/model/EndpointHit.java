@@ -1,36 +1,33 @@
 package ru.practicum.statserver.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
+@ToString
 @Table(name = "stats")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer id;
-    @Column(nullable = false, length = 50)
-    @NotBlank
+    Long id;
+
+    @Column(name = "app", nullable = false, length = 100)
     String app;
-    @Column(nullable = false, length = 255)
-    @NotBlank
+
+    @Column(name = "uri", nullable = false, length = 150)
     String uri;
-    @Column(nullable = false, length = 15)
-    @NotBlank
+
+    @Column(name = "ip", nullable = false, length = 30)
     String ip;
-    @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Timestamp timestamp;
+
+    @Column(name = "timestamp")
+    LocalDateTime timestamp;
 }

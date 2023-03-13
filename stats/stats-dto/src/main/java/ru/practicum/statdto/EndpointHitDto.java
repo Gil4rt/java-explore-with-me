@@ -9,18 +9,18 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointHitDto {
-    Integer id;
     @NotBlank
     String app;
+
     @NotBlank
     String uri;
+
     @NotBlank
     String ip;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    Timestamp timestamp;
+
+    String timestamp;
 }

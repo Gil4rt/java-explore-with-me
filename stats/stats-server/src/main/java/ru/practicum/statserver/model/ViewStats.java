@@ -1,12 +1,11 @@
 package ru.practicum.statserver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
+@ToString
 public class ViewStats {
 
     private String app;
