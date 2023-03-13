@@ -3,16 +3,11 @@ package ru.practicum.statserver.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statserver.model.EndpointHit;
 import ru.practicum.statserver.model.ViewStats;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
