@@ -13,12 +13,9 @@ import javax.validation.constraints.NotBlank;
 public class EndpointHitDto {
     @NotBlank
     String app;
-
     @NotBlank
     String uri;
-
     @NotBlank
     String ip;
-
     String timestamp;
 }

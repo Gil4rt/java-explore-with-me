@@ -1,5 +1,7 @@
 package ru.practicum.statserver.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.statdto.EndpointHitDto;
 import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.model.EndpointHit;
@@ -8,6 +10,7 @@ import ru.practicum.statserver.model.ViewStats;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StatsMapper {
     public static EndpointHit toEndpointHit(EndpointHitDto endpointHitDto) {
         EndpointHit endpointHit = new EndpointHit();
