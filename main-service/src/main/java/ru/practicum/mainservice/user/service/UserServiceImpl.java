@@ -5,14 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.maindto.UserDto;
-import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.pagination.OffsetPageable;
 import ru.practicum.mainservice.user.mapper.UserMapper;
 import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.repository.UserRepository;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

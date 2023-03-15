@@ -2,12 +2,8 @@ package ru.practicum.mainservice.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.maindto.UserDto;
-import ru.practicum.mainservice.user.mapper.UserMapper;
-import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.service.UserService;
 
 import javax.validation.Valid;
@@ -18,7 +14,7 @@ import java.util.Collection;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/users")
-public class UserController {
+public class AdminUserController {
 
     private final UserService userService;
 
