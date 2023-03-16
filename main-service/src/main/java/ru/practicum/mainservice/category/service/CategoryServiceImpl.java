@@ -12,7 +12,6 @@ import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.pagination.OffsetPageable;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
