@@ -24,13 +24,7 @@ public class StatsMapper {
     }
 
     public static EndpointHitDto toEndpointHitDto(EndpointHit endpointHit) {
-        EndpointHitDto endpointHitDto = new EndpointHitDto();
-        endpointHitDto.setApp(endpointHit.getApp());
-        endpointHitDto.setIp(endpointHit.getIp());
-        endpointHitDto.setUri(endpointHit.getUri());
-        endpointHitDto.setTimestamp(endpointHit.getTimestamp().toString());
-
-        return endpointHitDto;
+        return new EndpointHitDto(endpointHit.getApp(), endpointHit.getIp(), endpointHit.getUri(), endpointHit.getTimestamp().toString());
     }
 
     public static ViewStatsDto toViewStatsDto(ViewStats viewStats) {

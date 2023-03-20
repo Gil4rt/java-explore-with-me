@@ -1,28 +1,24 @@
 package ru.practicum.mainservice.category.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import ru.practicum.maindto.CategoryDto;
-import ru.practicum.maindto.NewCategoryDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
 import ru.practicum.mainservice.category.model.Category;
+import ru.practicum.mainservice.category.model.dto.CategoryDto;
+import ru.practicum.mainservice.category.model.dto.NewCategoryDto;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CategoryMapper {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface CategoryMapper {
 
-    public static CategoryDto toCategoryDto(Category category) {
-        CategoryDto dto = new CategoryDto();
-        dto.setId(category.getId());
-        dto.setName(category.getName());
-        return dto;
-    }
+    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
-    public static Category toCategory(NewCategoryDto newCategoryDto) {
-        Category category = new Category();
-        category.setName(newCategoryDto.getName());
-        return category;
-    }
+    Category toCategory(CategoryDto categoryDto);
 
-    public static Category toCategory(CategoryDto categoryDto) {
-        return new Category(categoryDto.getId(), categoryDto.getName());
-    }
+    Category toCategory(NewCategoryDto newCategoryDto);
+
+    CategoryDto toCategoryDto(Category category);
+
+    @Mapping(target = "id", ignore = true)
+    Category category(NewCategoryDto newCategoryDto);
 }

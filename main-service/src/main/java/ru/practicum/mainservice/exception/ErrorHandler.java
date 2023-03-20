@@ -11,9 +11,9 @@ import java.util.Date;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ValidationException e) {
+    public ErrorResponse handleValidationException(Exception e) {
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -36,6 +36,17 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(final ConflictException e) {
+        return new ErrorResponse(
+                new Date(),
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse runtimeErrorHandler(final RuntimeException e) {
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.CONFLICT.value(),

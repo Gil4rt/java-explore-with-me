@@ -29,7 +29,6 @@ public class StatsController {
             @RequestParam String end,
             @RequestParam String[] uris,
             @RequestParam(defaultValue = "false") boolean unique) {
-
         return statsService.getStats(start, end, uris, unique);
     }
 }

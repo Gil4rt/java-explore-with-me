@@ -1,16 +1,20 @@
 package ru.practicum.mainservice.category.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.maindto.CategoryDto;
-import ru.practicum.maindto.NewCategoryDto;
 import ru.practicum.mainservice.category.mapper.CategoryMapper;
 import ru.practicum.mainservice.category.model.Category;
+import ru.practicum.mainservice.category.model.dto.CategoryDto;
+import ru.practicum.mainservice.category.model.dto.NewCategoryDto;
 import ru.practicum.mainservice.category.repository.CategoryRepository;
+import ru.practicum.mainservice.event.repository.EventRepository;
+import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.pagination.OffsetPageable;
 
+import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -18,41 +22,61 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository repository;
+    private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public CategoryDto create(NewCategoryDto newCategoryDto) {
-        return CategoryMapper.toCategoryDto(repository.save(CategoryMapper.toCategory(newCategoryDto)));
+        Category category;
+        if (categoryRepository.findByName(newCategoryDto.getName()).isPresent()) {
+            throw new ConflictException("This name is already taken");
+        }
+        try {
+            category = categoryRepository.save(CategoryMapper.INSTANCE.toCategory(newCategoryDto));
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Error validation object");
+        }
+        return CategoryMapper.INSTANCE.toCategoryDto(category);
     }
 
     @Override
     public void delete(long categoryId) {
-        repository.delete(findById(categoryId));
+        Category category = findById(categoryId);
+        if (eventRepository.countByCategoryId(categoryId) > 0) {
+            throw new ConflictException("Cannot delete a category with events");
+        }
+        categoryRepository.delete(category);
     }
 
     @Override
     public CategoryDto update(CategoryDto categoryDto, long categoryId) {
         Category category = findById(categoryId);
+        String newName = categoryDto.getName();
+        if (!category.getName().equals(newName) && categoryRepository.existsByName(newName)) {
+            throw new ConflictException("Category with name " + newName + " already exists");
+        }
         category.setName(categoryDto.getName());
-        return CategoryMapper.toCategoryDto(repository.save(category));
+        Category cat;
+        try {
+            cat = categoryRepository.save(category);
+        } catch (DataIntegrityViolationException e) {
+            throw new ValidationException("Error validation object");
+        }
+        return CategoryMapper.INSTANCE.toCategoryDto(cat);
     }
 
     @Override
     public Collection<CategoryDto> getAll(Integer from, Integer size) {
-        return repository.findAll(OffsetPageable.newInstance(from, size, Sort.by(Sort.Direction.ASC, "id")))
-                .stream()
-                .map(CategoryMapper::toCategoryDto)
-                .collect(Collectors.toList());
+        return categoryRepository.findAll(OffsetPageable.newInstance(from, size, Sort.by(Sort.Direction.ASC, "id"))).stream().map(CategoryMapper.INSTANCE::toCategoryDto).collect(Collectors.toList());
     }
 
     @Override
     public CategoryDto getCategoryDto(long categoryId) {
-        return CategoryMapper.toCategoryDto(findById(categoryId));
+        return CategoryMapper.INSTANCE.toCategoryDto(findById(categoryId));
     }
 
     Category findById(long categoryId) {
-        return repository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Category not found with id " + categoryId));
+        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("Category not found with id " + categoryId));
     }
 
 }

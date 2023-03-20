@@ -1,21 +1,19 @@
 package ru.practicum.statdto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.NotBlank;
-
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointHitDto {
-    @NotBlank
     String app;
-    @NotBlank
     String uri;
-    @NotBlank
     String ip;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     String timestamp;
 }

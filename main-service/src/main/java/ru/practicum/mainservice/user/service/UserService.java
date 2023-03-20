@@ -1,7 +1,7 @@
 package ru.practicum.mainservice.user.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.maindto.UserDto;
+import ru.practicum.mainservice.user.model.dto.UserDto;
 
 import java.util.Collection;
 

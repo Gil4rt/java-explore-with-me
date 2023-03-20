@@ -2,9 +2,10 @@ package ru.practicum.mainservice.category.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.maindto.CategoryDto;
-import ru.practicum.maindto.NewCategoryDto;
+import ru.practicum.mainservice.category.model.dto.CategoryDto;
+import ru.practicum.mainservice.category.model.dto.NewCategoryDto;
 import ru.practicum.mainservice.category.service.CategoryService;
 
 import javax.validation.Valid;
@@ -23,8 +24,8 @@ public class AdminCategoryController {
     }
 
     @PatchMapping("/{id}")
-    public CategoryDto update(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Long id) {
-        return categoryService.update(categoryDto, id);
+    public ResponseEntity<CategoryDto> update(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Long id) {
+        return new ResponseEntity<>(categoryService.update(categoryDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
