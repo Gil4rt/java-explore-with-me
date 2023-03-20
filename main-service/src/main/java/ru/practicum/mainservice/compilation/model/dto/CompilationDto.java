@@ -19,4 +19,4 @@ public class CompilationDto {
     @NotBlank(message = "Description cannot be blank")
     String title;
     List<EventDto> events;
-}а
+}
