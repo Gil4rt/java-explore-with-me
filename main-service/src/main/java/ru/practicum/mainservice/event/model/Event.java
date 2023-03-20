@@ -23,7 +23,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(nullable = false, length = 500)
-    String annotation;  // краткое описание
+    String annotation;  // short description
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
@@ -31,11 +31,11 @@ public class Event {
     @JsonManagedReference
     List<Request> requests;
     @Column(name = "created_on", nullable = false)
-    LocalDateTime createdOn;  // дата создания события
+    LocalDateTime createdOn;  // event creation date
     @Column(name = "description", length = 1000)
-    String description;  // полное описание
+    String description;  //complete description
     @Column(name = "event_date")
-    LocalDateTime eventDate;  // дата намеченного события
+    LocalDateTime eventDate;  //date of the scheduled event
     @ManyToOne
     @JoinColumn(name = "initiator_id")
     User initiator;
@@ -46,20 +46,19 @@ public class Event {
     })
     Location location;
     @Column(nullable = false)
-    Boolean paid;  // нужно ли оплачивать событие
+    Boolean paid;  // whether the event must be paid
     @Column(name = "participant_limit")
-    Integer participantLimit;  // лимит количества участников
-
+    Integer participantLimit;  // number of participants limit
     @Column(name = "published_on")
-    LocalDateTime publishedOn;  // дата и время публикации
+    LocalDateTime publishedOn;  // date and time of publication
     @Column(name = "request_moderation", nullable = false)
-    Boolean requestModeration;  // нужна ли пре-модерация заявок на участие
+    Boolean requestModeration;  // whether pre-moderation of requests is necessary
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    State state;  // статус события
+    State state;   // event status
     @Column(nullable = false)
-    String title; // заголовок
+    String title; //title
     @Column(nullable = false)
-    Long views;  // количество просмотров
+    Long views;  // number of views
 
 }

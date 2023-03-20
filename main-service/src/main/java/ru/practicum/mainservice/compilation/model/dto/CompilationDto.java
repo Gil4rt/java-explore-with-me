@@ -16,7 +16,7 @@ import java.util.List;
 public class CompilationDto {
     Long id;
     Boolean pinned;
-    @NotBlank(message = "Описание не может быть пустым")
+    @NotBlank(message = "Description cannot be blank")
     String title;
     List<EventDto> events;
-}
+}а
