@@ -11,6 +11,7 @@ import ru.practicum.statserver.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,13 +33,19 @@ public class StatsServiceImpl implements StatsService {
         LocalDateTime startDateTime = LocalDateTime.parse(start, FORMATTER);
         LocalDateTime endDateTime = LocalDateTime.parse(end, FORMATTER);
         List<ViewStats> result;
-        if (!unique) {
-            result = repository.findNotUniqueIP(startDateTime, endDateTime, List.of(uris));
+        if (uris == null || uris.length == 0) {
+            if (!unique) {
+                result = repository.findNotUniqueIP(startDateTime, endDateTime, Collections.emptyList());
+            } else {
+                result = repository.findUniqueIp(startDateTime, endDateTime, Collections.emptyList());
+            }
         } else {
-            result = repository.findUniqueIp(startDateTime, endDateTime, List.of(uris));
+            if (!unique) {
+                result = repository.findNotUniqueIP(startDateTime, endDateTime, List.of(uris));
+            } else {
+                result = repository.findUniqueIp(startDateTime, endDateTime, List.of(uris));
+            }
         }
         return result.stream().map(StatsMapper::toViewStatsDto).collect(Collectors.toList());
     }
-
-
 }
