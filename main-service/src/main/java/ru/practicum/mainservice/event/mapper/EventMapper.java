@@ -3,7 +3,6 @@ package ru.practicum.mainservice.event.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.factory.Mappers;
 import ru.practicum.mainservice.category.mapper.CategoryMapper;
 import ru.practicum.mainservice.event.model.Event;
 import ru.practicum.mainservice.event.model.dto.EventDto;
