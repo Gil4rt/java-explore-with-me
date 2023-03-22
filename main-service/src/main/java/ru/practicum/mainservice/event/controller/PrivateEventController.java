@@ -31,7 +31,7 @@ public class PrivateEventController {
 
     @PostMapping("users/{userId}/events")
     public ResponseEntity<EventDto> addEventOwner(@PathVariable @Min(1) Long userId,
-                                                @Valid @RequestBody NewEventDto newEventDto) {
+                                                  @Valid @RequestBody NewEventDto newEventDto) {
         return new ResponseEntity<>(eventService.addEventOwner(userId, newEventDto), HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class PrivateEventController {
 
     @PatchMapping("users/{userId}/events/{eventId}")
     public ResponseEntity<EventDto> pathEventOwner(@PathVariable @Min(1) Long userId, @PathVariable @Min(1) Long eventId,
-                                                 @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+                                                   @RequestBody UpdateEventUserRequest updateEventUserRequest) {
         return new ResponseEntity<>(eventService.pathEventOwner(userId, eventId, updateEventUserRequest), HttpStatus.OK);
     }
 }

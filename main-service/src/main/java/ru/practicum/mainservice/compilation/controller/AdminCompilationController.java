@@ -33,7 +33,7 @@ public class AdminCompilationController {
 
     @PatchMapping("/{compId}")
     public ResponseEntity<CompilationDto> patchCompilation(@PathVariable @Min(1) Long compId,
-                                                   @RequestBody NewCompilationDto updateReq) {
+                                                           @RequestBody NewCompilationDto updateReq) {
         return new ResponseEntity<>(compilationService.pathCompilation(compId, updateReq), HttpStatus.OK);
     }
 }

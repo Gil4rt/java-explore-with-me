@@ -25,21 +25,21 @@ public class AdminEventController {
 
     @GetMapping("/events")
     public ResponseEntity<Collection<EventDto>> getEvents(@RequestParam(required = false) List<Long> users,
-                                                         @RequestParam(required = false) List<String> states,
-                                                         @RequestParam(required = false) List<Long> categories,
-                                                         @RequestParam(required = false)
-                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-                                                         @RequestParam(required = false)
-                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-                                                         @RequestParam(defaultValue = "0") Integer from,
-                                                         @RequestParam(defaultValue = "10") Integer size) {
+                                                          @RequestParam(required = false) List<String> states,
+                                                          @RequestParam(required = false) List<Long> categories,
+                                                          @RequestParam(required = false)
+                                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                                          @RequestParam(required = false)
+                                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+                                                          @RequestParam(defaultValue = "0") Integer from,
+                                                          @RequestParam(defaultValue = "10") Integer size) {
         return new ResponseEntity<>(eventService.getEventsByAdmin(users, states, categories, rangeStart, rangeEnd,
                 from, size), HttpStatus.OK);
     }
 
     @PatchMapping("/events/{eventId}")
     public ResponseEntity<EventDto> patchEvent(@PathVariable @Min(1) Long eventId,
-                                             @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
+                                               @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
         return new ResponseEntity<>(eventService.pathEventByAdmin(eventId, updateEventAdminRequest), HttpStatus.OK);
     }
 

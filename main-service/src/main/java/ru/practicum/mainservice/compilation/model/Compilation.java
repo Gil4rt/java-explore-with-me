@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.event.model.Event;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
