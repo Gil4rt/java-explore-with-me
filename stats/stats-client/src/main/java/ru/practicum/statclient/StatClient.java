@@ -13,12 +13,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Slf4j
-@Component
 public class StatClient {
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final WebClient webClient;
 
-    @Value("${app.name}")
+    @Value("${spring.application.name}")
     private String appName;
 
     public StatClient(String url) {
