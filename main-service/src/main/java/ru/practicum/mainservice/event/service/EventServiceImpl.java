@@ -39,6 +39,7 @@ import static ru.practicum.mainservice.event.model.StateAction.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -46,7 +47,6 @@ public class EventServiceImpl implements EventService {
     private final StatClient client;
     private final EventMapper mapper;
 
-    @Transactional
     @Override
     public Collection<EventDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart,
                                                  LocalDateTime rangeEnd, Integer from, Integer size) {
@@ -75,7 +75,6 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public Collection<EventDto> getAllEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                              LocalDateTime rangeEnd, Boolean onlyAvailable, SortEv sort, Integer from, Integer size,
@@ -103,7 +102,7 @@ public class EventServiceImpl implements EventService {
         return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public EventDto pathEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event not found"));
@@ -138,7 +137,6 @@ public class EventServiceImpl implements EventService {
         return mapper.toEventDto(eventRepository.save(event));
     }
 
-    @Transactional
     @Override
     public EventDto getFullInfoEvent(Long id, HttpServletRequest httpRequest) {
         Event event = eventRepository.findById(id).orElseThrow(() -> new NotFoundException("Event not found"));
@@ -157,7 +155,7 @@ public class EventServiceImpl implements EventService {
                 .map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public EventDto addEventOwner(Long userId, NewEventDto newEventDto) {
         if (newEventDto == null) {

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.pagination.OffsetPageable;
 import ru.practicum.mainservice.user.mapper.UserMapper;
@@ -17,11 +18,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
 
     @Override
+    @Transactional
     public UserDto create(UserDto userDto) {
         validateUserDto(userDto);
         User user = mapper.toUser(userDto);
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ConflictException("User with ID " + userId + " does not exist"));

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.category.mapper.CategoryMapper;
 import ru.practicum.mainservice.category.model.Category;
 import ru.practicum.mainservice.category.model.dto.CategoryDto;
@@ -20,12 +21,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final CategoryMapper mapper;
 
     @Override
+    @Transactional
     public CategoryDto create(NewCategoryDto newCategoryDto) {
         Category category;
         if (categoryRepository.findByName(newCategoryDto.getName()).isPresent()) {
@@ -40,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void delete(long categoryId) {
         Category category = findById(categoryId);
         if (eventRepository.countByCategoryId(categoryId) > 0) {
@@ -49,6 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto update(CategoryDto categoryDto, long categoryId) {
         Category category = findById(categoryId);
         String newName = categoryDto.getName();

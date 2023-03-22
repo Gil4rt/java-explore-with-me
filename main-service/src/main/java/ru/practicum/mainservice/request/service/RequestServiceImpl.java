@@ -29,6 +29,7 @@ import static ru.practicum.mainservice.request.model.RequestStatus.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
 
     private final RequestRepository requestRepository;
@@ -100,7 +101,7 @@ public class RequestServiceImpl implements RequestService {
         }
         throw new NotFoundException("User with id" + userId + "not found");
     }
-
+    @Transactional
     @Override
     public ParticipationRequestDto addRequestFromUser(Long userId, Long eventId) {
         userRepository.findById(userId).orElseThrow(RuntimeException::new);
@@ -125,7 +126,6 @@ public class RequestServiceImpl implements RequestService {
             return mapper.toParticipationRequestDto(requestRepository.save(new Request(
                     0L, LocalDateTime.now(), event, userId, PENDING)));
         }
-
     }
 
     @Transactional

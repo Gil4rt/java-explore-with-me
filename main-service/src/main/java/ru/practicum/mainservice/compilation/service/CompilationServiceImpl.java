@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.compilation.mapper.CompilationMapper;
 import ru.practicum.mainservice.compilation.model.Compilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
     private final EventRepository eventRepository;
     private final CompilationRepository compilationRepository;
@@ -31,6 +33,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventMapper eventMapper;
 
     @Override
+    @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
@@ -45,6 +48,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompById(Long compId) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException(String.format("Set with id %d not found", compId)));
@@ -52,6 +56,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto pathCompilation(Long compId, NewCompilationDto updateComp) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException(String.format("Set with id %d not found", compId)));
