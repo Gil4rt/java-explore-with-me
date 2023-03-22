@@ -2,6 +2,7 @@ package ru.practicum.mainservice.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainservice.user.model.dto.UserDto;
 import ru.practicum.mainservice.user.service.UserService;
@@ -14,6 +15,7 @@ import java.util.Collection;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/admin/users")
+@Validated
 public class AdminUserController {
 
     private final UserService userService;
@@ -31,7 +33,7 @@ public class AdminUserController {
     }
 
     @GetMapping()
-    public Collection<UserDto> findUsers(@RequestParam Collection<Long> ids,
+    public Collection<UserDto> findUsers(@RequestParam(required = false) Collection<Long> ids,
                                          @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                          @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         return userService.getAll(ids, from, size);

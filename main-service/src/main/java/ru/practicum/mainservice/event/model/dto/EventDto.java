@@ -8,6 +8,7 @@ import ru.practicum.mainservice.event.model.Location;
 import ru.practicum.mainservice.event.model.State;
 import ru.practicum.mainservice.user.model.User;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,11 +19,13 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventDto {
     Long id;
+    @Size(max = 1000, message = "Annotation cannot be longer than 1000 characters.")
     String annotation;
     Category category;
     Integer confirmedRequests;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn;
+    @Size(max = 1000, message = "Description cannot be longer than 1000 characters.")
     String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
@@ -34,6 +37,7 @@ public class EventDto {
     LocalDateTime publishedOn;
     Boolean requestModeration;
     State state;
+    @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;
     Long views;
 }

@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -17,5 +18,6 @@ public class CategoryDto {
     long id;
     @NotNull
     @NotBlank
+    @Size(max = 50, message = "Name cannot be longer than 50 characters.")
     String name;
 }
