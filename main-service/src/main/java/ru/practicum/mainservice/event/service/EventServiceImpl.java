@@ -27,7 +27,10 @@ import ru.practicum.statclient.StatClient;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.practicum.mainservice.event.model.State.*;
@@ -149,7 +152,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException(String.format("userId: %d not found", userId));
         }
         Pageable pageable = PageRequest.of(from, size);
-        Set<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
+        List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         return events.stream()
                 .map(mapper::toEventDto)
                 .collect(Collectors.toList());

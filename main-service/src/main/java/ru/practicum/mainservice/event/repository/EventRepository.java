@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
-    Set<Event> findAllByInitiatorId(Long userId, Pageable pageable);
+    List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
     Set<Event> findAllByIdIn(List<Long> eventId);
 
