@@ -11,6 +11,7 @@ import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.model.dto.UserDto;
 import ru.practicum.mainservice.user.repository.UserRepository;
 
+import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
+        validateUserDto(userDto);
         User user = mapper.toUser(userDto);
         User savedUser = userRepository.save(user);
         return mapper.toUserDto(savedUser);
@@ -40,5 +42,14 @@ public class UserServiceImpl implements UserService {
                 ? userRepository.findAll(OffsetPageable.newInstance(from, size, Sort.unsorted()))
                 : userRepository.findAllByIdIn(ids, OffsetPageable.newInstance(from, size, Sort.unsorted()));
         return result.stream().map(mapper::toUserDto).collect(Collectors.toList());
+    }
+
+    private void validateUserDto(UserDto userDto) {
+        if (userDto.getName() == null) {
+            throw new ValidationException("Name cannot be null");
+        }
+        if (userRepository.findByName(userDto.getName()).isPresent()) {
+            throw new ConflictException("This name is already taken");
+        }
     }
 }
