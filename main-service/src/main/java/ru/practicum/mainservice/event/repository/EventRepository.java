@@ -7,12 +7,12 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.mainservice.event.model.Event;
 
 import java.util.List;
+import java.util.Set;
 
-@Repository
 public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
-    List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
+    Set<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
-    List<Event> findAllByIdIn(List<Long> eventId);
+    Set<Event> findAllByIdIn(List<Long> eventId);
 
     Long countByCategoryId(Long catId);
 }

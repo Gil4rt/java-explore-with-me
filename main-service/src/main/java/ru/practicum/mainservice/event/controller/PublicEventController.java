@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -24,18 +25,18 @@ public class PublicEventController {
     private final EventService eventService;
 
     @GetMapping("events")
-    public ResponseEntity<Object> getAllEvents(@RequestParam(required = false) String text,
-                                               @RequestParam(required = false) List<Long> categories,
-                                               @RequestParam(required = false) Boolean paid,
-                                               @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public ResponseEntity<Collection<EventDto>> getAllEvents(@RequestParam(required = false) String text,
+                                                             @RequestParam(required = false) List<Long> categories,
+                                                             @RequestParam(required = false) Boolean paid,
+                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                LocalDateTime rangeStart,
-                                               @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                LocalDateTime rangeEnd,
-                                               @RequestParam(required = false) Boolean onlyAvailable,
-                                               @RequestParam(required = false) SortEv sort,
-                                               @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
-                                               @Min(1) @RequestParam(defaultValue = "10") Integer size,
-                                               HttpServletRequest httpRequest) {
+                                                             @RequestParam(required = false) Boolean onlyAvailable,
+                                                             @RequestParam(required = false) SortEv sort,
+                                                             @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                             @Min(1) @RequestParam(defaultValue = "10") Integer size,
+                                                             HttpServletRequest httpRequest) {
         return new ResponseEntity<>(eventService.getAllEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
                 from, size, httpRequest), HttpStatus.OK);
     }

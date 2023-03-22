@@ -17,8 +17,6 @@ import java.util.List;
 public class CompilationDto {
     Long id;
     Boolean pinned;
-    @Size(max = 100, message = "Title cannot be longer than 1000 characters.")
-    @NotBlank(message = "Description cannot be blank")
     String title;
     List<EventDto> events;
 }

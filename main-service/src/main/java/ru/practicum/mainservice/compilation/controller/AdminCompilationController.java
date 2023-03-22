@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
 import ru.practicum.mainservice.compilation.model.dto.NewCompilationDto;
 import ru.practicum.mainservice.compilation.service.CompilationService;
 
@@ -20,7 +21,7 @@ public class AdminCompilationController {
     private final CompilationService compilationService;
 
     @PostMapping
-    public ResponseEntity<Object> addCompilation(@RequestBody @Valid NewCompilationDto compilationDto) {
+    public ResponseEntity<CompilationDto> addCompilation(@RequestBody @Valid NewCompilationDto compilationDto) {
         return new ResponseEntity<>(compilationService.save(compilationDto), HttpStatus.CREATED);
     }
 
@@ -31,7 +32,7 @@ public class AdminCompilationController {
     }
 
     @PatchMapping("/{compId}")
-    public ResponseEntity<Object> patchCompilation(@PathVariable @Min(1) Long compId,
+    public ResponseEntity<CompilationDto> patchCompilation(@PathVariable @Min(1) Long compId,
                                                    @RequestBody NewCompilationDto updateReq) {
         return new ResponseEntity<>(compilationService.pathCompilation(compId, updateReq), HttpStatus.OK);
     }

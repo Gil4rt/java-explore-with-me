@@ -6,6 +6,7 @@ import ru.practicum.mainservice.event.model.Event;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -25,5 +26,5 @@ public class Compilation {
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "compilation_ev", joinColumns = {@JoinColumn(name = "compilation_id")},
             inverseJoinColumns = @JoinColumn(name = "event_id"))
-    List<Event> events;
+    Set<Event> events;
 }

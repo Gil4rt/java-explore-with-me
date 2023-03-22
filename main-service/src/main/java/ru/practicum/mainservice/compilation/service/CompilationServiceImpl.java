@@ -18,6 +18,7 @@ import ru.practicum.mainservice.exception.NotFoundException;
 
 import javax.validation.ValidationException;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto save(NewCompilationDto compilationDto) {
-        List<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
+        Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
         }
@@ -54,7 +55,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto pathCompilation(Long compId, NewCompilationDto updateComp) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException(String.format("Set with id %d not found", compId)));
-        if (updateComp.getTitle() != null) {
+        if (updateComp.getTitle() != null && !updateComp.getTitle().isBlank()) {
             compilation.setTitle(updateComp.getTitle());
         }
         if (updateComp.getPinned() != null) {

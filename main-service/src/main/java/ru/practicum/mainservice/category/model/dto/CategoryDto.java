@@ -16,7 +16,6 @@ import javax.validation.constraints.Size;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryDto {
     long id;
-    @NotNull
     @NotBlank
     @Size(max = 50, message = "Name cannot be longer than 50 characters.")
     String name;

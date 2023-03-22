@@ -1,5 +1,6 @@
 package ru.practicum.mainservice.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -8,12 +9,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.validation.ValidationException;
 import java.util.Date;
 
+@Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(Exception e) {
+        log.error("ValidationException occurred: {}", e.getMessage());
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.BAD_REQUEST.value(),
@@ -25,6 +28,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFoundException(final NotFoundException e) {
+        log.error("NotFoundException occurred: {}", e.getMessage());
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.NOT_FOUND.value(),
@@ -36,6 +40,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(final ConflictException e) {
+        log.error("ConflictException occurred: {}", e.getMessage());
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.CONFLICT.value(),
@@ -46,7 +51,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse runtimeErrorHandler(final RuntimeException e) {
+    public ErrorResponse handleThrowable(final Throwable e) {
+        log.error("Throwable occurred: {}", e.getMessage());
         return new ErrorResponse(
                 new Date(),
                 HttpStatus.CONFLICT.value(),

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -13,9 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewCompilationDto {
-    @NotBlank
+    @Size(max = 100, message = "Title cannot be longer than 1000 characters.")
+    @NotBlank(message = "Description cannot be blank")
     private String title;
-
+    @NotNull
     private Boolean pinned;
     private List<Long> events;
 
