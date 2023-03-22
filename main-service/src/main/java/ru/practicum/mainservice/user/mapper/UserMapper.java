@@ -6,10 +6,8 @@ import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.model.dto.UserDto;
 import ru.practicum.mainservice.user.model.dto.UserShortDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
-
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserDto toUserDto(User user);
 

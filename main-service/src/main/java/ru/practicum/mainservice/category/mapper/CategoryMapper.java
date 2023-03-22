@@ -8,10 +8,9 @@ import ru.practicum.mainservice.category.model.Category;
 import ru.practicum.mainservice.category.model.dto.CategoryDto;
 import ru.practicum.mainservice.category.model.dto.NewCategoryDto;
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CategoryMapper {
 
-    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     Category toCategory(CategoryDto categoryDto);
 

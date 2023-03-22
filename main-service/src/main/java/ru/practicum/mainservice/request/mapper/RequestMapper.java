@@ -11,12 +11,10 @@ import ru.practicum.mainservice.request.model.dto.ParticipationRequestDto;
 import ru.practicum.mainservice.user.mapper.UserMapper;
 
 
-@Mapper(uses = {
+@Mapper(componentModel = "spring", uses = {
         UserMapper.class, CategoryMapper.class, EventMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RequestMapper {
-
-    RequestMapper INSTANCE = Mappers.getMapper(RequestMapper.class);
 
     @Mapping(target = "requester", source = "requesterId")
     @Mapping(target = "event", source = "event.id")

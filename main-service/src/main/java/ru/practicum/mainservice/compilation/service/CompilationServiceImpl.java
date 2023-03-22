@@ -26,6 +26,9 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventRepository eventRepository;
     private final CompilationRepository compilationRepository;
 
+    private final CompilationMapper compilationMapper;
+    private final EventMapper eventMapper;
+
     @Override
     public CompilationDto save(NewCompilationDto compilationDto) {
         List<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
@@ -34,7 +37,7 @@ public class CompilationServiceImpl implements CompilationService {
         }
         Compilation compilation = new Compilation(0L, compilationDto.getPinned(), compilationDto.getTitle(), events);
         try {
-            return CompilationMapper.INSTANCE.toCompilationDto(compilationRepository.save(compilation));
+            return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
         } catch (DataIntegrityViolationException e) {
             throw new ValidationException("Error validation object");
         }
@@ -61,7 +64,7 @@ public class CompilationServiceImpl implements CompilationService {
             compilation.setEvents(eventRepository.findAllByIdIn(updateComp.getEvents()));
         }
         compilationRepository.save(compilation);
-        return CompilationMapper.INSTANCE.toCompilationDto(compilation);
+        return compilationMapper.toCompilationDto(compilation);
     }
 
     @Override
@@ -69,7 +72,7 @@ public class CompilationServiceImpl implements CompilationService {
         Pageable pageable = PageRequest.of(from, size);
         return compilationRepository.findAll(pageable).stream()
                 .filter(comp -> comp.getPinned() == pinned)
-                .map(CompilationMapper.INSTANCE::toCompilationDto)
+                .map(compilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
     }
 
@@ -79,9 +82,9 @@ public class CompilationServiceImpl implements CompilationService {
                 new NotFoundException(String.format("Set with id %d not found", compId)));
         List<EventDto> events = compilation.getEvents()
                 .stream()
-                .map(EventMapper.INSTANCE::toEventDto)
+                .map(eventMapper::toEventDto)
                 .collect(Collectors.toList());
-        CompilationDto dto = CompilationMapper.INSTANCE.toCompilationDto(compilation);
+        CompilationDto dto = compilationMapper.toCompilationDto(compilation);
         dto.setEvents(events);
         return dto;
     }

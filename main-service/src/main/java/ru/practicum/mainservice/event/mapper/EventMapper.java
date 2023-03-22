@@ -10,10 +10,9 @@ import ru.practicum.mainservice.event.model.dto.EventDto;
 import ru.practicum.mainservice.event.model.dto.EventShortDto;
 import ru.practicum.mainservice.user.mapper.UserMapper;
 
-@Mapper(uses = {UserMapper.class, CategoryMapper.class},
+@Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface EventMapper {
-    EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
     @Mapping(target = "confirmedRequests", ignore = true)
     EventDto toEventDto(Event event);

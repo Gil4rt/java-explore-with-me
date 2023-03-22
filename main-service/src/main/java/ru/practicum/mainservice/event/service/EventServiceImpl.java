@@ -2,6 +2,7 @@ package ru.practicum.mainservice.event.service;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,11 @@ import static ru.practicum.mainservice.event.model.StateAction.*;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final StatClient client;
-
+    private final EventMapper mapper;
     @Transactional
     @Override
     public Collection<EventDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart,
@@ -71,7 +71,7 @@ public class EventServiceImpl implements EventService {
             expression = expression.and(qEvent.eventDate.loe(rangeEnd));
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
-        return events.stream().map(EventMapper.INSTANCE::toEventDto)
+        return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
 
@@ -100,7 +100,7 @@ public class EventServiceImpl implements EventService {
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
         client.addHit(httpRequest);
-        return events.stream().map(EventMapper.INSTANCE::toEventDto)
+        return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
 
@@ -135,7 +135,7 @@ public class EventServiceImpl implements EventService {
                     .orElseThrow(() -> new NotFoundException("Category not found"));
             event.setCategory(category);
         }
-        return EventMapper.INSTANCE.toEventDto(eventRepository.save(event));
+        return mapper.toEventDto(eventRepository.save(event));
     }
 
     @Transactional
@@ -143,7 +143,7 @@ public class EventServiceImpl implements EventService {
     public EventDto getFullInfoEvent(Long id, HttpServletRequest httpRequest) {
         Event event = eventRepository.findById(id).orElseThrow(() -> new NotFoundException("Event not found"));
         client.addHit(httpRequest);
-        return EventMapper.INSTANCE.toEventDto(event);
+        return mapper.toEventDto(event);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class EventServiceImpl implements EventService {
         Pageable pageable = PageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         return events.stream()
-                .map(EventMapper.INSTANCE::toEventDto)
+                .map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
 
@@ -178,7 +178,7 @@ public class EventServiceImpl implements EventService {
                 newEventDto.getEventDate(), initiator, newEventDto.getLocation(),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
                 null, newEventDto.getRequestModeration(), PENDING, newEventDto.getTitle(), 0L);
-        return EventMapper.INSTANCE.toEventDto(eventRepository.save(event));
+        return mapper.toEventDto(eventRepository.save(event));
     }
 
     @Override
@@ -187,7 +187,7 @@ public class EventServiceImpl implements EventService {
             Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                     "Category with eventId:" + eventId + "not found"));
             if (userId.equals(event.getInitiator().getId())) {
-                return EventMapper.INSTANCE.toEventDto(event);
+                return mapper.toEventDto(event);
             }
         }
         throw new NotFoundException(String.format("userId: %d not found", userId));
@@ -225,7 +225,7 @@ public class EventServiceImpl implements EventService {
         Optional.ofNullable(updateEventUserRequest.getParticipantLimit()).ifPresent(event::setParticipantLimit);
         Optional.ofNullable(updateEventUserRequest.getRequestModeration()).ifPresent(event::setRequestModeration);
         Event savedEvent = eventRepository.save(event);
-        return EventMapper.INSTANCE.toEventDto(savedEvent);
+        return mapper.toEventDto(savedEvent);
     }
 
 }

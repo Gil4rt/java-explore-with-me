@@ -7,9 +7,7 @@ import ru.practicum.mainservice.compilation.model.Compilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
 
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface CompilationMapper {
-    CompilationMapper INSTANCE = Mappers.getMapper(CompilationMapper.class);
-
     CompilationDto toCompilationDto(Compilation compilation);
 }

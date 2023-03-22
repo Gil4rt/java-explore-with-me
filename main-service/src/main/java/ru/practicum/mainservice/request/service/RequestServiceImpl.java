@@ -35,6 +35,8 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
+    private final RequestMapper mapper;
+
     @Override
     public List<ParticipationRequestDto> getRequestsInfoUser(Long userId, Long eventId) {
         if (userRepository.existsById(userId)) {
@@ -43,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
                 throw new ValidationException("This is not your event");
             }
             return event.getRequests().stream()
-                    .map(RequestMapper.INSTANCE::toParticipationRequestDto)
+                    .map(mapper::toParticipationRequestDto)
                     .collect(Collectors.toList());
 
         }
@@ -69,18 +71,18 @@ public class RequestServiceImpl implements RequestService {
                     throw new ConflictException("The limit of participants has expired");
                 } else {
                     request.setStatus(RequestStatus.CONFIRMED);
-                    RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(request));
+                    mapper.toParticipationRequestDto(requestRepository.save(request));
                 }
             } else if (statusUpdate.getStatus() == REJECTED) {
                 request.setStatus(REJECTED);
-                RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(request));
+                mapper.toParticipationRequestDto(requestRepository.save(request));
             }
-            RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(request));
+            mapper.toParticipationRequestDto(requestRepository.save(request));
         }
         List<ParticipationRequestDto> confirmedRequests = requestRepository.findAllByIdInAndStatus(requestsId,
-                CONFIRMED).stream().map(RequestMapper.INSTANCE::toRequestDto).collect(Collectors.toList());
+                CONFIRMED).stream().map(mapper::toRequestDto).collect(Collectors.toList());
         List<ParticipationRequestDto> rejectedRequests = requestRepository.findAllByIdInAndStatus(requestsId,
-                REJECTED).stream().map(RequestMapper.INSTANCE::toRequestDto).collect(Collectors.toList());
+                REJECTED).stream().map(mapper::toRequestDto).collect(Collectors.toList());
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
 
@@ -93,7 +95,7 @@ public class RequestServiceImpl implements RequestService {
         if (userRepository.existsById(userId)) {
             return requestRepository.findAllByRequesterId(userId)
                     .stream()
-                    .map(RequestMapper.INSTANCE::toRequestDto)
+                    .map(mapper::toRequestDto)
                     .collect(Collectors.toList());
         }
         throw new NotFoundException("User with id" + userId + "not found");
@@ -117,10 +119,10 @@ public class RequestServiceImpl implements RequestService {
             throw new ConflictException("The limit of participants has expired");
 
         } else if (event.getRequestModeration() != null && !event.getRequestModeration()) {
-            return RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(new Request(
+            return mapper.toParticipationRequestDto(requestRepository.save(new Request(
                     0L, LocalDateTime.now(), event, userId, CONFIRMED)));
         } else {
-            return RequestMapper.INSTANCE.toParticipationRequestDto(requestRepository.save(new Request(
+            return mapper.toParticipationRequestDto(requestRepository.save(new Request(
                     0L, LocalDateTime.now(), event, userId, PENDING)));
         }
 
@@ -140,6 +142,6 @@ public class RequestServiceImpl implements RequestService {
             throw new ConflictException("The application has already been cancelled");
         }
         request.setStatus(CANCELED);
-        return RequestMapper.INSTANCE.toRequestDto(requestRepository.save(request));
+        return mapper.toRequestDto(requestRepository.save(request));
     }
 }

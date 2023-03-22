@@ -1,6 +1,7 @@
 package ru.practicum.mainservice.category.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
-
+    private final CategoryMapper mapper;
     @Override
     public CategoryDto create(NewCategoryDto newCategoryDto) {
         Category category;
@@ -32,11 +32,11 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ConflictException("This name is already taken");
         }
         try {
-            category = categoryRepository.save(CategoryMapper.INSTANCE.toCategory(newCategoryDto));
+            category = categoryRepository.save(mapper.toCategory(newCategoryDto));
         } catch (DataIntegrityViolationException e) {
             throw new ValidationException("Error validation object");
         }
-        return CategoryMapper.INSTANCE.toCategoryDto(category);
+        return mapper.toCategoryDto(category);
     }
 
     @Override
@@ -62,21 +62,23 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (DataIntegrityViolationException e) {
             throw new ValidationException("Error validation object");
         }
-        return CategoryMapper.INSTANCE.toCategoryDto(cat);
+        return mapper.toCategoryDto(cat);
     }
 
     @Override
     public Collection<CategoryDto> getAll(Integer from, Integer size) {
-        return categoryRepository.findAll(OffsetPageable.newInstance(from, size, Sort.by(Sort.Direction.ASC, "id"))).stream().map(CategoryMapper.INSTANCE::toCategoryDto).collect(Collectors.toList());
+        return categoryRepository.findAll(OffsetPageable.newInstance(from, size, Sort.by(
+                Sort.Direction.ASC, "id"))).stream().map(mapper::toCategoryDto).collect(Collectors.toList());
     }
 
     @Override
     public CategoryDto getCategoryDto(long categoryId) {
-        return CategoryMapper.INSTANCE.toCategoryDto(findById(categoryId));
+        return mapper.toCategoryDto(findById(categoryId));
     }
 
     Category findById(long categoryId) {
-        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("Category not found with id " + categoryId));
+        return categoryRepository.findById(categoryId).orElseThrow(() ->
+                new NotFoundException("Category not found with id " + categoryId));
     }
 
 }

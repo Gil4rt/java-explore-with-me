@@ -18,15 +18,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
+    private final UserMapper mapper;
 
     @Override
     public UserDto create(UserDto userDto) {
         validateUserDto(userDto);
-        User user = UserMapper.INSTANCE.toUser(userDto);
+        User user = mapper.toUser(userDto);
         User savedUser = userRepository.save(user);
-        return UserMapper.INSTANCE.toUserDto(savedUser);
+        return mapper.toUserDto(savedUser);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         Page<User> result = ids == null || ids.isEmpty()
                 ? userRepository.findAll(OffsetPageable.newInstance(from, size, Sort.unsorted()))
                 : userRepository.findAllByIdIn(ids, OffsetPageable.newInstance(from, size, Sort.unsorted()));
-        return result.stream().map(UserMapper.INSTANCE::toUserDto).collect(Collectors.toList());
+        return result.stream().map(mapper::toUserDto).collect(Collectors.toList());
     }
 
     private void validateUserDto(UserDto userDto) {

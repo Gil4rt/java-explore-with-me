@@ -39,7 +39,6 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "initiator_id")
     User initiator;
-    @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "lat", column = @Column(name = "lat")),
             @AttributeOverride(name = "lon", column = @Column(name = "lon"))
