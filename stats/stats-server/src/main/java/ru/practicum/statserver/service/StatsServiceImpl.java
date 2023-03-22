@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
-
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final StatsRepository repository;
 
@@ -39,6 +38,4 @@ public class StatsServiceImpl implements StatsService {
         }
         return result.stream().map(StatsMapper::toViewStatsDto).collect(Collectors.toList());
     }
-
-
 }
