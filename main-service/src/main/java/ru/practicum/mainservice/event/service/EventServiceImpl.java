@@ -102,6 +102,7 @@ public class EventServiceImpl implements EventService {
         return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public EventDto pathEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
@@ -155,6 +156,7 @@ public class EventServiceImpl implements EventService {
                 .map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
+
     @Transactional
     @Override
     public EventDto addEventOwner(Long userId, NewEventDto newEventDto) {

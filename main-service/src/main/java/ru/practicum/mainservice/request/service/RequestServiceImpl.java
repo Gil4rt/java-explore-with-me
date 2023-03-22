@@ -101,6 +101,7 @@ public class RequestServiceImpl implements RequestService {
         }
         throw new NotFoundException("User with id" + userId + "not found");
     }
+
     @Transactional
     @Override
     public ParticipationRequestDto addRequestFromUser(Long userId, Long eventId) {
