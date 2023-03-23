@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS EVENTS
     title              varchar(1000),
     ad_message         varchar(1000),
     ad_moderation      boolean,
-    VIEWS              bigint DEFAULT 0,
     CONSTRAINT pk_events PRIMARY KEY (id)
 );
 

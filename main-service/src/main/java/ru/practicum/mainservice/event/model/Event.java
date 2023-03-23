@@ -3,6 +3,8 @@ package ru.practicum.mainservice.event.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import ru.practicum.mainservice.category.model.Category;
 import ru.practicum.mainservice.request.model.Request;
 import ru.practicum.mainservice.user.model.User;
@@ -27,8 +29,9 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
-    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "event")
     @JsonManagedReference
+    @Fetch(FetchMode.SUBSELECT)
     List<Request> requests;
     @Column(name = "created_on", nullable = false)
     LocalDateTime createdOn;  // event creation date
@@ -57,7 +60,4 @@ public class Event {
     State state;   // event status
     @Column(nullable = false)
     String title; //title
-    @Column(nullable = false)
-    Long views;  // number of views
-
 }
