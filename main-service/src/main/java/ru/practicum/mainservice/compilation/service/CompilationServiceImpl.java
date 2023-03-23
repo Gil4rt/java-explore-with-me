@@ -33,10 +33,6 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
-        List<Long> eventIds = compilationDto.getEvents();
-        if (eventIds == null || eventIds.isEmpty()) {
-            throw new NotFoundException("No events provided");
-        }
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
