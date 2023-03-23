@@ -3,8 +3,10 @@ package ru.practicum.mainservice.compilation.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.mainservice.compilation.mapper.CustomCompilationMapper;
 import ru.practicum.mainservice.compilation.mapper.CompilationMapper;
 import ru.practicum.mainservice.compilation.model.Compilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
@@ -29,20 +31,21 @@ public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
 
     private final CompilationMapper compilationMapper;
+    private final CustomCompilationMapper customCompilationMapper;
     private final EventMapper eventMapper;
 
     @Override
     @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
         if (compilationDto.getEvents() == null || compilationDto.getEvents().isEmpty()) {
-            Compilation compilation = new Compilation(0L, compilationDto.getPinned(), compilationDto.getTitle(), new HashSet<>());
+            Compilation compilation = customCompilationMapper.mapCompilationDtoToCompilation(compilationDto, new HashSet<>());
             return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
         }
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
         }
-        Compilation compilation = new Compilation(0L, compilationDto.getPinned(), compilationDto.getTitle(), events);
+        Compilation compilation = customCompilationMapper.mapCompilationDtoToCompilation(compilationDto, events);
         return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
     }
 
@@ -74,7 +77,12 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationDto> getAllCompilations(Boolean pinned, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from, size);
+        Pageable pageable;
+        if (pinned == null) {
+            pageable = PageRequest.of(from, size);
+        } else {
+            pageable = PageRequest.of(from, size, Sort.Direction.DESC, "id");
+        }
         return compilationRepository.findAllByPinned(pinned, pageable).stream()
                 .map(compilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
