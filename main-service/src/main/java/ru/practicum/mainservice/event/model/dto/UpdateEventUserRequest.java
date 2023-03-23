@@ -21,19 +21,15 @@ import java.time.LocalDateTime;
 public class UpdateEventUserRequest {
     @Size(max = 1000, message = "Annotation cannot be longer than 1000 characters.")
     String annotation;
-    @NotBlank
-    CategoryDto category;
+    Long category;
     @Size(max = 1000, message = "Description cannot be longer than 1000 characters.")
     String description;
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss")
-    @Size(max = 50)
     LocalDateTime eventDate;
     LocationDto location;
-    @NotNull
     Boolean paid;
     @PositiveOrZero
-    int participantLimit;
-    @NotBlank
+    Integer participantLimit;
     Boolean requestModeration;
     StateAction stateAction;
     @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")

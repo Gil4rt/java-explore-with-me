@@ -137,7 +137,7 @@ public class EventServiceImpl implements EventService {
         if (updateEventAdminRequest.getPaid() != null) {
             event.setPaid(updateEventAdminRequest.getPaid());
         }
-        if (updateEventAdminRequest.getParticipantLimit() != 0) {
+        if (updateEventAdminRequest.getParticipantLimit() != null) {
             event.setParticipantLimit(updateEventAdminRequest.getParticipantLimit());
         }
         if (updateEventAdminRequest.getRequestModeration() != null) {
@@ -190,7 +190,7 @@ public class EventServiceImpl implements EventService {
                 newEventDto.getDescription(),
                 newEventDto.getEventDate(), initiator, mapper.toLocation(newEventDto.getLocation()),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
-                null, newEventDto.getRequestModeration(), PENDING, newEventDto.getTitle());
+                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle());
         return mapper.toEventDto(eventRepository.save(event));
     }
 
@@ -245,7 +245,7 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getPaid() != null) {
             event.setPaid(updateEventUserRequest.getPaid());
         }
-        if (updateEventUserRequest.getParticipantLimit() != 0) {
+        if (updateEventUserRequest.getParticipantLimit() != null) {
             event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
         }
         if (updateEventUserRequest.getRequestModeration() != null) {

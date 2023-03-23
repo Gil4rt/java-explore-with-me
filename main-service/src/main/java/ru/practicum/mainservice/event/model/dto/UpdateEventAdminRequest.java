@@ -24,14 +24,11 @@ public class UpdateEventAdminRequest {
     @Size(max = 1000, message = "Description cannot be longer than 1000 characters.")
     String description;
     @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss")
-    @NotNull
     LocalDateTime eventDate;
     LocationDto location;
-    @NotNull
     Boolean paid;
     @PositiveOrZero
-    int participantLimit;
-    @NotBlank
+    Integer participantLimit;
     Boolean requestModeration;
     @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;

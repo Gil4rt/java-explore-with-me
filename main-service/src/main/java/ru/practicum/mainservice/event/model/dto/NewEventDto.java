@@ -26,13 +26,13 @@ public class NewEventDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull
     LocalDateTime eventDate;
+    @NotNull
     LocationDto location;
     @NotNull
     Boolean paid;
     @PositiveOrZero
     int participantLimit;
-    @NotBlank
-    Boolean requestModeration;
+    boolean requestModeration;
     @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;
 }

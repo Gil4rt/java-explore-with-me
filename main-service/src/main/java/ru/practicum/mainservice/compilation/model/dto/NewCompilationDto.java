@@ -20,7 +20,6 @@ public class NewCompilationDto {
     private String title;
     @NotNull
     private Boolean pinned;
-    @NotBlank
     private List<Long> events;
 
 }

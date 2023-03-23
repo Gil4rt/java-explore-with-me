@@ -3,7 +3,6 @@ package ru.practicum.mainservice.event.model.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -11,9 +10,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Valid
-@NotNull
 public class LocationDto {
+    @NotNull
     Float lat;
+    @NotNull
     Float lon;
 }
