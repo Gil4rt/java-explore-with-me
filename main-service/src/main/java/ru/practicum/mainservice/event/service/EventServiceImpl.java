@@ -123,13 +123,29 @@ public class EventServiceImpl implements EventService {
             }
             event.setState(CANCELED);
         }
-        Optional.ofNullable(updateEventAdminRequest.getTitle()).ifPresent(event::setTitle);
-        Optional.ofNullable(updateEventAdminRequest.getAnnotation()).ifPresent(event::setAnnotation);
-        Optional.ofNullable(updateEventAdminRequest.getDescription()).ifPresent(event::setDescription);
-        Optional.ofNullable(updateEventAdminRequest.getEventDate()).ifPresent(event::setEventDate);
-        Optional.ofNullable(updateEventAdminRequest.getPaid()).ifPresent(event::setPaid);
-        Optional.ofNullable(updateEventAdminRequest.getParticipantLimit()).ifPresent(event::setParticipantLimit);
-        Optional.ofNullable(updateEventAdminRequest.getRequestModeration()).ifPresent(event::setRequestModeration);
+
+        if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
+            event.setTitle(updateEventAdminRequest.getTitle());
+        }
+        if (updateEventAdminRequest.getAnnotation() != null && !updateEventAdminRequest.getAnnotation().isBlank()) {
+            event.setAnnotation(updateEventAdminRequest.getAnnotation());
+        }
+        if (updateEventAdminRequest.getDescription() != null && !updateEventAdminRequest.getDescription().isBlank()) {
+            event.setDescription(updateEventAdminRequest.getDescription());
+        }
+        if (updateEventAdminRequest.getEventDate() != null) {
+            event.setEventDate(updateEventAdminRequest.getEventDate());
+        }
+        if (updateEventAdminRequest.getPaid() != null) {
+            event.setPaid(updateEventAdminRequest.getPaid());
+        }
+        if (updateEventAdminRequest.getParticipantLimit() != 0) {
+            event.setParticipantLimit(updateEventAdminRequest.getParticipantLimit());
+        }
+        if (updateEventAdminRequest.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventAdminRequest.getRequestModeration());
+        }
+
         if (updateEventAdminRequest.getCategory() != null) {
             Category category = categoryRepository.findById(updateEventAdminRequest.getCategory())
                     .orElseThrow(() -> new NotFoundException("Category not found"));
@@ -175,7 +191,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Category not found"));
         Event event = new Event(0L, newEventDto.getAnnotation(), category, new ArrayList<>(), LocalDateTime.now(),
                 newEventDto.getDescription(),
-                newEventDto.getEventDate(), initiator, newEventDto.getLocation(),
+                newEventDto.getEventDate(), initiator, mapper.toLocation(newEventDto.getLocation()),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
                 null, newEventDto.getRequestModeration(), PENDING, newEventDto.getTitle(), 0L);
         return mapper.toEventDto(eventRepository.save(event));
@@ -217,13 +233,29 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getStateAction() == PUBLISH_EVENT) {
             event.setState(PUBLISHED);
         }
-        Optional.ofNullable(updateEventUserRequest.getTitle()).ifPresent(event::setTitle);
-        Optional.ofNullable(updateEventUserRequest.getAnnotation()).ifPresent(event::setAnnotation);
-        Optional.ofNullable(updateEventUserRequest.getDescription()).ifPresent(event::setDescription);
-        Optional.ofNullable(updateEventUserRequest.getEventDate()).ifPresent(event::setEventDate);
-        Optional.ofNullable(updateEventUserRequest.getPaid()).ifPresent(event::setPaid);
-        Optional.ofNullable(updateEventUserRequest.getParticipantLimit()).ifPresent(event::setParticipantLimit);
-        Optional.ofNullable(updateEventUserRequest.getRequestModeration()).ifPresent(event::setRequestModeration);
+
+        if (updateEventUserRequest.getTitle() != null && !updateEventUserRequest.getTitle().isBlank()) {
+            event.setTitle(updateEventUserRequest.getTitle());
+        }
+        if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
+            event.setAnnotation(updateEventUserRequest.getAnnotation());
+        }
+        if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
+            event.setDescription(updateEventUserRequest.getDescription());
+        }
+        if (updateEventUserRequest.getEventDate() != null) {
+            event.setEventDate(updateEventUserRequest.getEventDate());
+        }
+        if (updateEventUserRequest.getPaid() != null) {
+            event.setPaid(updateEventUserRequest.getPaid());
+        }
+        if (updateEventUserRequest.getParticipantLimit() != 0) {
+            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        }
+        if (updateEventUserRequest.getRequestModeration() != null) {
+            event.setRequestModeration(updateEventUserRequest.getRequestModeration());
+        }
+
         Event savedEvent = eventRepository.save(event);
         return mapper.toEventDto(savedEvent);
     }

@@ -5,6 +5,10 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.event.model.Location;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,14 +18,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {
+    @Size(max = 1000, message = "Annotation cannot be longer than 1000 characters.")
     String annotation;
+    @NotNull
     Long category;
+    @Size(max = 1000, message = "Description cannot be longer than 1000 characters.")
     String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @NotNull
     LocalDateTime eventDate;
-    Location location;
+    LocationDto location;
+    @NotNull
     Boolean paid;
-    Integer participantLimit;
+    @PositiveOrZero
+    int participantLimit;
+    @NotBlank
     Boolean requestModeration;
+    @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;
 }

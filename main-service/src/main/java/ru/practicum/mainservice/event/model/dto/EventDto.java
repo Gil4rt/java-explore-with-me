@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.category.model.Category;
+import ru.practicum.mainservice.category.model.dto.CategoryDto;
 import ru.practicum.mainservice.event.model.Location;
 import ru.practicum.mainservice.event.model.State;
 import ru.practicum.mainservice.user.model.User;
+import ru.practicum.mainservice.user.model.dto.UserShortDto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -21,7 +25,7 @@ public class EventDto {
     Long id;
     @Size(max = 1000, message = "Annotation cannot be longer than 1000 characters.")
     String annotation;
-    Category category;
+    CategoryDto category;
     Integer confirmedRequests;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn;
@@ -29,10 +33,12 @@ public class EventDto {
     String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
-    User initiator;
-    Location location;
+    UserShortDto initiator;
+    LocationDto location;
+    @NotNull
     Boolean paid;
-    Integer participantLimit;
+    @PositiveOrZero
+    int participantLimit;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn;
     Boolean requestModeration;

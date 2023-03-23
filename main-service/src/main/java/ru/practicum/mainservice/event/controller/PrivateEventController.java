@@ -42,7 +42,7 @@ public class PrivateEventController {
 
     @PatchMapping("users/{userId}/events/{eventId}")
     public ResponseEntity<EventDto> pathEventOwner(@PathVariable @Min(1) Long userId, @PathVariable @Min(1) Long eventId,
-                                                   @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+                                                   @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
         return new ResponseEntity<>(eventService.pathEventOwner(userId, eventId, updateEventUserRequest), HttpStatus.OK);
     }
 }
