@@ -20,6 +20,7 @@ public interface EventMapper {
 
     @Mapping(target = "confirmedRequests", ignore = true)
     EventShortDto toEventShortDto(Event event);
+
     LocationDto toLocationDto(Location location);
 
     Location toLocation(LocationDto locationDto);

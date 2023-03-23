@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ru.practicum.mainservice.event.model.State.*;
@@ -123,7 +122,6 @@ public class EventServiceImpl implements EventService {
             }
             event.setState(CANCELED);
         }
-
         if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
             event.setTitle(updateEventAdminRequest.getTitle());
         }
@@ -145,7 +143,6 @@ public class EventServiceImpl implements EventService {
         if (updateEventAdminRequest.getRequestModeration() != null) {
             event.setRequestModeration(updateEventAdminRequest.getRequestModeration());
         }
-
         if (updateEventAdminRequest.getCategory() != null) {
             Category category = categoryRepository.findById(updateEventAdminRequest.getCategory())
                     .orElseThrow(() -> new NotFoundException("Category not found"));
@@ -233,7 +230,6 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getStateAction() == PUBLISH_EVENT) {
             event.setState(PUBLISHED);
         }
-
         if (updateEventUserRequest.getTitle() != null && !updateEventUserRequest.getTitle().isBlank()) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
@@ -255,7 +251,6 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getRequestModeration() != null) {
             event.setRequestModeration(updateEventUserRequest.getRequestModeration());
         }
-
         Event savedEvent = eventRepository.save(event);
         return mapper.toEventDto(savedEvent);
     }
