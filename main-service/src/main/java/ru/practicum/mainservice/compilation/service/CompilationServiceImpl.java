@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import ru.practicum.mainservice.compilation.mapper.CompilationMapper;
 import ru.practicum.mainservice.compilation.model.Compilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
@@ -33,6 +34,9 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
+        if (CollectionUtils.isEmpty(compilationDto.getEvents())) {
+            throw new IllegalArgumentException("Events list should not be empty");
+        }
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
