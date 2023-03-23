@@ -1,13 +1,13 @@
 package ru.practicum.mainservice.compilation.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.compilation.mapper.CompilationMapper;
 import ru.practicum.mainservice.compilation.model.Compilation;
+import ru.practicum.mainservice.compilation.model.QCompilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
 import ru.practicum.mainservice.compilation.model.dto.NewCompilationDto;
 import ru.practicum.mainservice.compilation.repository.CompilationRepository;
@@ -17,7 +17,6 @@ import ru.practicum.mainservice.event.model.dto.EventDto;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.exception.NotFoundException;
 
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,11 +39,7 @@ public class CompilationServiceImpl implements CompilationService {
             throw new NotFoundException("No events found");
         }
         Compilation compilation = new Compilation(0L, compilationDto.getPinned(), compilationDto.getTitle(), events);
-        try {
-            return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
-        } catch (DataIntegrityViolationException e) {
-            throw new ValidationException("Error validation object");
-        }
+        return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
     }
 
     @Override

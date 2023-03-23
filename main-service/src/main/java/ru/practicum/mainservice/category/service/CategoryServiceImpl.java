@@ -1,7 +1,6 @@
 package ru.practicum.mainservice.category.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.pagination.OffsetPageable;
 
-import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -30,16 +28,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDto create(NewCategoryDto newCategoryDto) {
-        Category category;
         if (categoryRepository.findByName(newCategoryDto.getName()).isPresent()) {
             throw new ConflictException("This name is already taken");
         }
-        try {
-            category = categoryRepository.save(mapper.toCategory(newCategoryDto));
-        } catch (DataIntegrityViolationException e) {
-            throw new ValidationException("Error validation object");
-        }
-        return mapper.toCategoryDto(category);
+        return mapper.toCategoryDto(categoryRepository.save(mapper.toCategory(newCategoryDto)));
     }
 
     @Override
@@ -61,13 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ConflictException("Category with name " + newName + " already exists");
         }
         category.setName(categoryDto.getName());
-        Category cat;
-        try {
-            cat = categoryRepository.save(category);
-        } catch (DataIntegrityViolationException e) {
-            throw new ValidationException("Error validation object");
-        }
-        return mapper.toCategoryDto(cat);
+        return mapper.toCategoryDto(categoryRepository.save(category));
     }
 
     @Override
