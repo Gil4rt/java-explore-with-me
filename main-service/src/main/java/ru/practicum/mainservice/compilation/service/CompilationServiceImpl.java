@@ -34,9 +34,6 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
-        if (CollectionUtils.isEmpty(compilationDto.getEvents())) {
-            throw new IllegalArgumentException("Events list should not be empty");
-        }
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
