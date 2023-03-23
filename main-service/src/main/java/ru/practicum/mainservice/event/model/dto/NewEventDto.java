@@ -17,10 +17,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {
+    @NotBlank
     @Size(max = 1000, message = "Annotation cannot be longer than 1000 characters.")
     String annotation;
     @NotNull
     Long category;
+    @NotBlank
     @Size(max = 1000, message = "Description cannot be longer than 1000 characters.")
     String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -33,6 +35,7 @@ public class NewEventDto {
     @PositiveOrZero
     int participantLimit;
     boolean requestModeration;
+    @NotBlank
     @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;
 }

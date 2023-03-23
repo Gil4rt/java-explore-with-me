@@ -16,6 +16,7 @@ import ru.practicum.mainservice.event.model.dto.EventDto;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.exception.NotFoundException;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,6 +34,10 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public CompilationDto save(NewCompilationDto compilationDto) {
+        if (compilationDto.getEvents() == null || compilationDto.getEvents().isEmpty()) {
+            Compilation compilation = new Compilation(0L, compilationDto.getPinned(), compilationDto.getTitle(), new HashSet<>());
+            return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
+        }
         Set<Event> events = eventRepository.findAllByIdIn(compilationDto.getEvents());
         if (compilationDto.getEvents().size() != events.size()) {
             throw new NotFoundException("No events found");
