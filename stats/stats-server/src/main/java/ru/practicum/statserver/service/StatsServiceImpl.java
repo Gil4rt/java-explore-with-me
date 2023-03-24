@@ -33,7 +33,7 @@ public class StatsServiceImpl implements StatsService {
         LocalDateTime startDateTime = LocalDateTime.parse(start, FORMATTER);
         LocalDateTime endDateTime = LocalDateTime.parse(end, FORMATTER);
         List<ViewStats> result;
-        if (uris == null || uris.length == 0) {
+        if (uris.length == 0) {
             if (!unique) {
                 result = repository.findNotUniqueIP(startDateTime, endDateTime, Collections.emptyList());
             } else {

@@ -72,13 +72,10 @@ public class RequestServiceImpl implements RequestService {
                     throw new ConflictException("The limit of participants has expired");
                 } else {
                     request.setStatus(RequestStatus.CONFIRMED);
-                    mapper.toParticipationRequestDto(requestRepository.save(request));
                 }
             } else if (statusUpdate.getStatus() == REJECTED) {
                 request.setStatus(REJECTED);
-                mapper.toParticipationRequestDto(requestRepository.save(request));
             }
-            mapper.toParticipationRequestDto(requestRepository.save(request));
         }
         List<ParticipationRequestDto> confirmedRequests = requestRepository.findAllByIdInAndStatus(requestsId,
                 CONFIRMED).stream().map(mapper::toRequestDto).collect(Collectors.toList());
@@ -86,6 +83,7 @@ public class RequestServiceImpl implements RequestService {
                 REJECTED).stream().map(mapper::toRequestDto).collect(Collectors.toList());
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
+
 
     public List<Request> getConfirmedRequests(List<Request> requests) {
         return requests.stream().filter(r -> r.getStatus() == CONFIRMED).collect(Collectors.toList());

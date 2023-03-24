@@ -72,7 +72,6 @@ public class CompilationServiceImpl implements CompilationService {
         if (updateComp.getEvents() != null) {
             compilation.setEvents(eventRepository.findAllByIdIn(updateComp.getEvents()));
         }
-        compilationRepository.save(compilation);
         return compilationMapper.toCompilationDto(compilation);
     }
 
