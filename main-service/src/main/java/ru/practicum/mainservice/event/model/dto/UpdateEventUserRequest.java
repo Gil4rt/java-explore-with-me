@@ -3,11 +3,8 @@ package ru.practicum.mainservice.event.model.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.mainservice.category.model.dto.CategoryDto;
 import ru.practicum.mainservice.event.model.StateAction;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;

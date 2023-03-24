@@ -3,7 +3,6 @@ package ru.practicum.mainservice.compilation.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
 import ru.practicum.mainservice.compilation.service.CompilationService;

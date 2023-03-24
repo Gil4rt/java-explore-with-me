@@ -6,11 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.mainservice.compilation.mapper.CustomCompilationMapper;
 import ru.practicum.mainservice.compilation.mapper.CompilationMapper;
+import ru.practicum.mainservice.compilation.mapper.CustomCompilationMapper;
 import ru.practicum.mainservice.compilation.model.Compilation;
 import ru.practicum.mainservice.compilation.model.dto.CompilationDto;
 import ru.practicum.mainservice.compilation.model.dto.NewCompilationDto;
+import ru.practicum.mainservice.compilation.model.dto.UpdateCompilationDto;
 import ru.practicum.mainservice.compilation.repository.CompilationRepository;
 import ru.practicum.mainservice.event.mapper.EventMapper;
 import ru.practicum.mainservice.event.model.Event;
@@ -59,7 +60,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     @Transactional
-    public CompilationDto pathCompilation(Long compId, NewCompilationDto updateComp) {
+    public CompilationDto pathCompilation(Long compId, UpdateCompilationDto updateComp) {
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(() ->
                 new NotFoundException(String.format("Set with id %d not found", compId)));
         if (updateComp.getTitle() != null && !updateComp.getTitle().isBlank()) {

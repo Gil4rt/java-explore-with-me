@@ -7,6 +7,7 @@ import ru.practicum.mainservice.event.model.Event;
 
 import java.util.HashSet;
 import java.util.Set;
+
 @Component
 public class CustomCompilationMapper {
 

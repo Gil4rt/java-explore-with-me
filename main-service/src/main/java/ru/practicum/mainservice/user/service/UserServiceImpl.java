@@ -12,7 +12,6 @@ import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.model.dto.UserDto;
 import ru.practicum.mainservice.user.repository.UserRepository;
 
-import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
