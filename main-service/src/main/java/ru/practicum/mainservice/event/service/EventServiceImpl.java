@@ -29,9 +29,11 @@ import ru.practicum.statdto.ViewStats;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static ru.practicum.mainservice.event.model.State.*;
 import static ru.practicum.mainservice.event.model.StateAction.*;
@@ -259,18 +261,19 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         return mapper.toEventDto(savedEvent);
     }
+
     public int getConfirmedRequestsCount(List<Request> requests) {
-        if(requests == null) {
+        if (requests == null) {
             return 0;
         }
         return (int) requests.stream().filter(r -> r.getStatus() == CONFIRMED).count();
     }
+
     public Long getViewStatsById(Long eventId) {
         String uri = "/events/" + eventId.toString();
         List<String> uris = List.of(uri);
         List<ViewStats> viewStats = client.getListStats(LocalDateTime.now().minusYears(1L),
                 LocalDateTime.now().plusYears(1L), uris, false);
-
         Map<Long, Long> map = viewStats.stream()
                 .filter(statRecord -> statRecord.getApp().equals("ewm-service"))
                 .collect(Collectors.toMap(
@@ -280,11 +283,13 @@ public class EventServiceImpl implements EventService {
                 );
         return map.getOrDefault(eventId, 0L);
     }
+
     public Long parseId(String str) {
         int index = str.lastIndexOf('/');
         String strId = str.substring(index + 1);
         return Long.parseLong(strId);
     }
+
     private Collection<EventDto> getEventDtos(Collection<Event> events) {
         return events.stream()
                 .map(event -> {

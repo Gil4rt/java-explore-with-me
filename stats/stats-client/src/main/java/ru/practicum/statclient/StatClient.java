@@ -42,6 +42,7 @@ public class StatClient {
                 .bodyToMono(EndpointHitDto.class)
                 .block();
     }
+
     public void addHit(HttpServletRequest httpRequest) {
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
                 .app(appName)
