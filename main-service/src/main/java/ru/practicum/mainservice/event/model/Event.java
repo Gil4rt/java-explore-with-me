@@ -59,5 +59,6 @@ public class Event {
     @Enumerated(EnumType.STRING)
     State state;   // event status
     @Column(nullable = false)
+
     String title; //title
 }
