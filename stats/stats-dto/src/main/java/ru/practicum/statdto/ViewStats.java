@@ -3,17 +3,15 @@ package ru.practicum.statdto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.NotBlank;
-
-@NoArgsConstructor
-@ToString
+@Data
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ViewStatsDto {
-    @NotBlank
+public class ViewStats {
     String app;
-    @NotBlank
     String uri;
     long hits;
 }

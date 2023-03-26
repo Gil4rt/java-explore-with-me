@@ -1,45 +1,78 @@
 package ru.practicum.statclient;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
 import ru.practicum.statdto.EndpointHitDto;
+import ru.practicum.statdto.ViewStats;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+@Slf4j
+public class StatClient {
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final WebClient webClient;
 
-public class StatClient extends BaseClient {
+    @Value("${spring.application.name}")
+    private String appName;
 
-    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
-                        .requestFactory(HttpComponentsClientHttpRequestFactory::new)
-                        .build()
-        );
+    public StatClient(String url) {
+        this.webClient = WebClient.create(url);
     }
 
-    public ResponseEntity<Object> addStats(EndpointHitDto endpointHitDto) {
-        return post("/hit", endpointHitDto);
+    public void addHit(HttpServletRequest httpRequest, Long eventId) {
+        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
+                .app(appName)
+                .ip(httpRequest.getRemoteAddr())
+                .uri(httpRequest.getRequestURI() + "/" + eventId)
+                .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
+                .build();
+        log.info("IP: {}", endpointHitDto.getIp());
+        log.info("URI: {}", endpointHitDto.getUri());
+        webClient.post()
+                .uri("/hit")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .bodyValue(endpointHitDto)
+                .retrieve()
+                .bodyToMono(EndpointHitDto.class)
+                .block();
     }
 
-    public ResponseEntity<Object> getStats(String start, String end, String[] uris, Boolean unique) {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("start", start);
-        parameters.put("end", end);
-        if (uris != null && uris.length != 0) {
-            parameters.put("uris", uris);
-        }
-        parameters.put("unique", unique);
-
-        if (parameters.containsKey("uris")) {
-            return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
-
-        } else {
-            return get("/stats?start={start}&end={end}&unique={unique}", parameters);
-        }
+    public void addHit(HttpServletRequest httpRequest) {
+        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
+                .app(appName)
+                .ip(httpRequest.getRemoteAddr())
+                .uri(httpRequest.getRequestURI())
+                .timestamp(LocalDateTime.now().format(DATE_TIME_FORMATTER))
+                .build();
+        log.info("IP: {}", endpointHitDto.getIp());
+        log.info("URI: {}", endpointHitDto.getUri());
+        webClient.post()
+                .uri("/hit")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .bodyValue(endpointHitDto)
+                .retrieve()
+                .bodyToMono(EndpointHitDto.class)
+                .block();
     }
+
+    public List<ViewStats> getListStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/stats")
+                        .queryParam("start", start.format(DATE_TIME_FORMATTER))
+                        .queryParam("end", end.format(DATE_TIME_FORMATTER))
+                        .queryParam("uris", uris)
+                        .queryParam("unique", unique)
+                        .build())
+                .retrieve()
+                .bodyToFlux(ViewStats.class)
+                .collectList()
+                .block();
+    }
+
 }
