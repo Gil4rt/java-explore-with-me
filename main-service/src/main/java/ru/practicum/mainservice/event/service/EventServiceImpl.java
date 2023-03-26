@@ -72,12 +72,7 @@ public class EventServiceImpl implements EventService {
             expression = expression.and(qEvent.eventDate.loe(rangeEnd));
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
-        events.forEach(event -> {
-           event.setViews(getViewStatsById(event.getId()));
-           event.setConfirmedRequests(getConfirmedRequestsCount(event.getRequests()));
-        });
-        return events.stream().map(mapper::toEventDto)
-                .collect(Collectors.toList());
+        return getEventDtos(events);
     }
 
     @Override
@@ -106,12 +101,7 @@ public class EventServiceImpl implements EventService {
         events.forEach(event -> {
             client.addHit(httpRequest, event.getId());
         });
-        events.forEach(event -> {
-            event.setViews(getViewStatsById(event.getId()));
-            event.setConfirmedRequests(getConfirmedRequestsCount(event.getRequests()));
-        });
-        return events.stream().map(mapper::toEventDto)
-                .collect(Collectors.toList());
+        return getEventDtos(events);
     }
 
     @Transactional
@@ -205,7 +195,7 @@ public class EventServiceImpl implements EventService {
                 newEventDto.getDescription(),
                 newEventDto.getEventDate(), initiator, mapper.toLocation(newEventDto.getLocation()),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
-                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle(), 0, 0);
+                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle());
         return mapper.toEventDto(eventRepository.save(event));
     }
 
@@ -294,5 +284,16 @@ public class EventServiceImpl implements EventService {
         int index = str.lastIndexOf('/');
         String strId = str.substring(index + 1);
         return Long.parseLong(strId);
+    }
+    private Collection<EventDto> getEventDtos(Collection<Event> events) {
+        return events.stream()
+                .map(event -> {
+                    int confirmedRequestsCount = getConfirmedRequestsCount(event.getRequests());
+                    EventDto eventDto = mapper.toEventDto(event);
+                    eventDto.setConfirmedRequests(confirmedRequestsCount);
+                    eventDto.setViews(getViewStatsById(event.getId()));
+                    return eventDto;
+                })
+                .collect(Collectors.toList());
     }
 }

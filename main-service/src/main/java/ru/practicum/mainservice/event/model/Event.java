@@ -60,8 +60,4 @@ public class Event {
     State state;   // event status
     @Column(nullable = false)
     String title; //title
-    @Column(name = "views_cache")
-    long views;
-    @Column(name = "confirmed_requests_cache")
-    long confirmedRequests;
 }
