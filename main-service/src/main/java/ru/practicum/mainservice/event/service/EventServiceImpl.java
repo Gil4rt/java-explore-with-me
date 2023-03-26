@@ -20,20 +20,22 @@ import ru.practicum.mainservice.event.model.dto.UpdateEventUserRequest;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
+import ru.practicum.mainservice.request.model.Request;
 import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.user.repository.UserRepository;
 import ru.practicum.statclient.StatClient;
+import ru.practicum.statdto.ViewStats;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ru.practicum.mainservice.event.model.State.*;
 import static ru.practicum.mainservice.event.model.StateAction.*;
+import static ru.practicum.mainservice.request.model.RequestStatus.CONFIRMED;
 
 
 @Service
@@ -70,6 +72,10 @@ public class EventServiceImpl implements EventService {
             expression = expression.and(qEvent.eventDate.loe(rangeEnd));
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
+        events.forEach(event -> {
+           event.setViews(getViewStatsById(event.getId()));
+           event.setConfirmedRequests(getConfirmedRequestsCount(event.getRequests()));
+        });
         return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
@@ -97,7 +103,13 @@ public class EventServiceImpl implements EventService {
             expression = expression.and(qEvent.eventDate.loe(rangeEnd));
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
-        client.addHit(httpRequest);
+        events.forEach(event -> {
+            client.addHit(httpRequest, event.getId());
+        });
+        events.forEach(event -> {
+            event.setViews(getViewStatsById(event.getId()));
+            event.setConfirmedRequests(getConfirmedRequestsCount(event.getRequests()));
+        });
         return events.stream().map(mapper::toEventDto)
                 .collect(Collectors.toList());
     }
@@ -153,9 +165,12 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDto getFullInfoEvent(Long id, HttpServletRequest httpRequest) {
-        Event event = eventRepository.findById(id).orElseThrow(() -> new NotFoundException("Event not found"));
+        Event event = eventRepository.findByIdAndState(id, PUBLISHED).orElseThrow(() -> new NotFoundException("Event not found"));
         client.addHit(httpRequest);
-        return mapper.toEventDto(event);
+        EventDto eventDto = mapper.toEventDto(event);
+        eventDto.setViews(getViewStatsById(event.getId()));
+        eventDto.setConfirmedRequests(getConfirmedRequestsCount(event.getRequests()));
+        return eventDto;
     }
 
     @Override
@@ -190,7 +205,7 @@ public class EventServiceImpl implements EventService {
                 newEventDto.getDescription(),
                 newEventDto.getEventDate(), initiator, mapper.toLocation(newEventDto.getLocation()),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
-                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle());
+                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle(), 0, 0);
         return mapper.toEventDto(eventRepository.save(event));
     }
 
@@ -254,5 +269,30 @@ public class EventServiceImpl implements EventService {
         Event savedEvent = eventRepository.save(event);
         return mapper.toEventDto(savedEvent);
     }
+    public int getConfirmedRequestsCount(List<Request> requests) {
+        if(requests == null) {
+            return 0;
+        }
+        return (int) requests.stream().filter(r -> r.getStatus() == CONFIRMED).count();
+    }
+    public Long getViewStatsById(Long eventId) {
+        String uri = "/events/" + eventId.toString();
+        List<String> uris = List.of(uri);
+        List<ViewStats> viewStats = client.getListStats(LocalDateTime.now().minusYears(1L),
+                LocalDateTime.now().plusYears(1L), uris, false);
 
+        Map<Long, Long> map = viewStats.stream()
+                .filter(statRecord -> statRecord.getApp().equals("ewm-service"))
+                .collect(Collectors.toMap(
+                                statRecord -> parseId(statRecord.getUri()),
+                                ViewStats::getHits
+                        )
+                );
+        return map.getOrDefault(eventId, 0L);
+    }
+    public Long parseId(String str) {
+        int index = str.lastIndexOf('/');
+        String strId = str.substring(index + 1);
+        return Long.parseLong(strId);
+    }
 }

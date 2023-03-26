@@ -1,6 +1,7 @@
 package ru.practicum.mainservice.event.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("/")
 @RequiredArgsConstructor
 @Validated
+@Slf4j
 public class PublicEventController {
     private final EventService eventService;
 

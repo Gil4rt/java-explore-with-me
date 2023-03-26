@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statdto.ViewStatsDto;
+import ru.practicum.statdto.ViewStats;
 import ru.practicum.statserver.mapper.StatsMapper;
-import ru.practicum.statserver.model.ViewStats;
 import ru.practicum.statserver.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +27,11 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(String start, String end, String[] uris, boolean unique) {
+    public List<ViewStats> getStats(String start, String end, List<String> uris, boolean unique) {
         LocalDateTime startDateTime = LocalDateTime.parse(start, FORMATTER);
         LocalDateTime endDateTime = LocalDateTime.parse(end, FORMATTER);
         List<ViewStats> result;
-        if (uris.length == 0) {
+        if (uris.isEmpty()) {
             if (!unique) {
                 result = repository.findNotUniqueIP(startDateTime, endDateTime, Collections.emptyList());
             } else {
@@ -41,11 +39,11 @@ public class StatsServiceImpl implements StatsService {
             }
         } else {
             if (!unique) {
-                result = repository.findNotUniqueIP(startDateTime, endDateTime, List.of(uris));
+                result = repository.findNotUniqueIP(startDateTime, endDateTime, uris);
             } else {
-                result = repository.findUniqueIp(startDateTime, endDateTime, List.of(uris));
+                result = repository.findUniqueIp(startDateTime, endDateTime, uris);
             }
         }
-        return result.stream().map(StatsMapper::toViewStatsDto).collect(Collectors.toList());
+        return result;
     }
 }

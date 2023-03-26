@@ -3,9 +3,7 @@ package ru.practicum.statserver.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statdto.ViewStatsDto;
 import ru.practicum.statserver.model.EndpointHit;
-import ru.practicum.statserver.model.ViewStats;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,14 +22,6 @@ public class StatsMapper {
     }
 
     public static EndpointHitDto toEndpointHitDto(EndpointHit endpointHit) {
-        return new EndpointHitDto(endpointHit.getApp(), endpointHit.getIp(), endpointHit.getUri(), endpointHit.getTimestamp().toString());
-    }
-
-    public static ViewStatsDto toViewStatsDto(ViewStats viewStats) {
-        ViewStatsDto viewStatsDto = new ViewStatsDto();
-        viewStatsDto.setApp(viewStats.getApp());
-        viewStatsDto.setUri(viewStats.getUri());
-        viewStatsDto.setHits(viewStats.getHits());
-        return viewStatsDto;
+        return new EndpointHitDto(endpointHit.getApp(), endpointHit.getUri(), endpointHit.getIp(), endpointHit.getTimestamp().toString());
     }
 }

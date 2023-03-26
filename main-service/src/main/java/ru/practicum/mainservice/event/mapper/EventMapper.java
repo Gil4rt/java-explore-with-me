@@ -15,7 +15,6 @@ import ru.practicum.mainservice.user.mapper.UserMapper;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface EventMapper {
 
-    @Mapping(target = "confirmedRequests", ignore = true)
     EventDto toEventDto(Event event);
 
     @Mapping(target = "confirmedRequests", ignore = true)

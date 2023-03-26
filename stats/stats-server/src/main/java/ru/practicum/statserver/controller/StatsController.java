@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.statdto.EndpointHitDto;
-import ru.practicum.statdto.ViewStatsDto;
+import ru.practicum.statdto.ViewStats;
 import ru.practicum.statserver.service.StatsService;
 
 import java.util.List;
@@ -24,10 +24,10 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<ViewStatsDto> getStats(
+    public List<ViewStats> getStats(
             @RequestParam String start,
             @RequestParam String end,
-            @RequestParam(required = false) String[] uris,
+            @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         return statsService.getStats(start, end, uris, unique);
     }
