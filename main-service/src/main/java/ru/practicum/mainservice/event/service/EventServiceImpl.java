@@ -100,9 +100,7 @@ public class EventServiceImpl implements EventService {
             expression = expression.and(qEvent.eventDate.loe(rangeEnd));
         }
         Collection<Event> events = eventRepository.findAll(expression, pageable).getContent();
-        events.forEach(event -> {
-            client.addHit(httpRequest, event.getId());
-        });
+        client.addHit(httpRequest);
         return getEventDtos(events);
     }
 
