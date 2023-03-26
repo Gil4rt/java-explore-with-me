@@ -68,7 +68,7 @@ public class RequestServiceImpl implements RequestService {
                 throw new ConflictException("The status of the application is unchangeable");
             }
             if (statusUpdate.getStatus() == RequestStatus.CONFIRMED) {
-                if (event.getParticipantLimit() <= getConfirmedRequests(event.getRequests()).size()) {
+                if (event.getParticipantLimit() <= getConfirmedRequestsCount(event.getRequests())) {
                     throw new ConflictException("The limit of participants has expired");
                 } else {
                     request.setStatus(RequestStatus.CONFIRMED);
@@ -85,8 +85,11 @@ public class RequestServiceImpl implements RequestService {
     }
 
 
-    public List<Request> getConfirmedRequests(List<Request> requests) {
-        return requests.stream().filter(r -> r.getStatus() == CONFIRMED).collect(Collectors.toList());
+    public int getConfirmedRequestsCount(List<Request> requests) {
+        if (requests == null) {
+            return 0;
+        }
+        return (int) requests.stream().filter(r -> r.getStatus() == CONFIRMED).count();
     }
 
     @Override
@@ -115,7 +118,7 @@ public class RequestServiceImpl implements RequestService {
         if (userId.equals(event.getInitiator().getId())) {
             throw new ConflictException("This is your event");
         }
-        if (event.getParticipantLimit() <= getConfirmedRequests(event.getRequests()).size()) {
+        if (event.getParticipantLimit() <= getConfirmedRequestsCount(event.getRequests())) {
             throw new ConflictException("The limit of participants has expired");
 
         } else if (event.getRequestModeration() != null && !event.getRequestModeration()) {
