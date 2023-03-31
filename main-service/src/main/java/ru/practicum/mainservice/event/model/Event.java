@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import ru.practicum.mainservice.category.model.Category;
+import ru.practicum.mainservice.comment.model.Comment;
 import ru.practicum.mainservice.request.model.Request;
 import ru.practicum.mainservice.user.model.User;
 
@@ -60,4 +61,6 @@ public class Event {
     State state;   // event status
     @Column(nullable = false)
     String title; //title
+    @OneToMany(mappedBy = "event")
+    List<Comment> comments;
 }

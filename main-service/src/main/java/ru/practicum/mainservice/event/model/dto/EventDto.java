@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.mainservice.category.model.dto.CategoryDto;
+import ru.practicum.mainservice.comment.model.dto.CommentDto;
 import ru.practicum.mainservice.event.model.State;
 import ru.practicum.mainservice.user.model.dto.UserShortDto;
 
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,4 +45,5 @@ public class EventDto {
     @Size(max = 1000, message = "Title cannot be longer than 1000 characters.")
     String title;
     Long views;
+    List<CommentDto> comments;
 }
