@@ -22,4 +22,16 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Integer> {
             "AND (h.uri IN ?3 OR ?3 IS NULL) " +
             "GROUP BY h.app, h.uri ORDER BY COUNT(h.ip) DESC")
     List<ViewStats> findUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query(value = "SELECT new ru.practicum.statdto.ViewStats(h.app, h.uri, COUNT (DISTINCT h.ip)) " +
+            "FROM EndpointHit h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "GROUP BY h.app, h.uri ORDER BY COUNT(h.ip) DESC")
+    List<ViewStats> findAllUniqueIp(LocalDateTime start, LocalDateTime end);
+
+    @Query(value = "SELECT new ru.practicum.statdto.ViewStats(h.app, h.uri, COUNT (h.ip)) " +
+            "FROM EndpointHit h " +
+            "WHERE h.timestamp BETWEEN ?1 AND ?2 " +
+            "GROUP BY h.app, h.uri ORDER BY COUNT(h.ip) DESC")
+    List<ViewStats> findAllNotUniqueIp(LocalDateTime start, LocalDateTime end);
 }
