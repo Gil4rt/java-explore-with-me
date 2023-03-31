@@ -1,4 +1,4 @@
-https://github.com/Gil4rt/java-explore-with-me/pull/5
+Ссылка на Pull-request: https://github.com/Gil4rt/java-explore-with-me/pull/5
 
 ### Explore with me - сервис для организации мероприятий.
 Сервис даёт возможность делиться информацией об интересных событиях и помогать найти компанию для участия в них.
