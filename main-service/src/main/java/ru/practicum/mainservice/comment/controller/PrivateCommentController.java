@@ -1,7 +1,6 @@
 package ru.practicum.mainservice.comment.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainservice.comment.model.dto.CommentDto;
@@ -12,12 +11,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
-@RequestMapping(path = "/users/{userId}/events/{eventId}/comments")
+@RequestMapping(path = "/users/{userId}/")
 public class PrivateCommentController {
     private final CommentService commentService;
 
-    @PostMapping()
+    @PostMapping(path = "events/{eventId}/comments")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto createComment(@PathVariable long eventId,
                                     @PathVariable long userId,
@@ -25,9 +23,17 @@ public class PrivateCommentController {
         return commentService.addComment(newCommentDto, eventId, userId);
     }
 
-    @DeleteMapping("/{commentId}")
+    @DeleteMapping("events/{eventId}/comments/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(@PathVariable long userId, @PathVariable long commentId) {
+    public void deleteComment(@PathVariable long userId, @PathVariable long commentId, @PathVariable long eventId) {
         commentService.deleteComment(commentId, userId);
+    }
+
+    @PatchMapping(path = "comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto updateComment(@RequestBody @Valid NewCommentDto commentDto,
+                                    @PathVariable long userId,
+                                    @PathVariable long commentId) {
+        return commentService.updateComment(userId, commentId, commentDto);
     }
 }

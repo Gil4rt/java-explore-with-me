@@ -6,6 +6,7 @@ import ru.practicum.mainservice.event.model.Event;
 import ru.practicum.mainservice.user.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,5 +29,9 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     Event event;
+    @Column(name = "comment_date")
+    LocalDateTime createdOn;
+    @Column(name = "comment_date_edited")
+    LocalDateTime editedOn;
 }
 
