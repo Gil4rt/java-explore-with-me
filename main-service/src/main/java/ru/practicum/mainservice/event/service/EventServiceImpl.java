@@ -195,7 +195,7 @@ public class EventServiceImpl implements EventService {
                 newEventDto.getDescription(),
                 newEventDto.getEventDate(), initiator, mapper.toLocation(newEventDto.getLocation()),
                 newEventDto.getPaid(), newEventDto.getParticipantLimit(),
-                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle());
+                null, newEventDto.isRequestModeration(), PENDING, newEventDto.getTitle(), new ArrayList<>());
         return mapper.toEventDto(eventRepository.save(event));
     }
 

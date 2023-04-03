@@ -10,7 +10,6 @@ import ru.practicum.statserver.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,11 +30,11 @@ public class StatsServiceImpl implements StatsService {
         LocalDateTime startDateTime = LocalDateTime.parse(start, FORMATTER);
         LocalDateTime endDateTime = LocalDateTime.parse(end, FORMATTER);
         List<ViewStats> result;
-        if (uris.isEmpty()) {
+        if (uris == null || uris.isEmpty()) {
             if (!unique) {
-                result = repository.findNotUniqueIP(startDateTime, endDateTime, Collections.emptyList());
+                result = repository.findAllNotUniqueIp(startDateTime, endDateTime);
             } else {
-                result = repository.findUniqueIp(startDateTime, endDateTime, Collections.emptyList());
+                result = repository.findAllUniqueIp(startDateTime, endDateTime);
             }
         } else {
             if (!unique) {
